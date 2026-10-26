@@ -1,0 +1,10 @@
+flowchart LR
+  A["Divergencia<br/>de ramas"] --> B["Integración<br/>merge · rebase · pick · stash"]
+  B --> C{"¿Se solapan<br/>los cambios?"}
+  C -->|"No"| D["Auto-merge"]
+  C -->|"Sí"| E["CONFLICTO"]
+  E --> F["Diagnóstico + resolución<br/>:1: :2: :3: · ours/theirs · mergetool"]
+  F --> G["Validar + cerrar<br/>diff --check · tests · commit"]
+  E --> H["Abortar<br/>--abort"]
+  D --> G
+  F -.-> I["rerere"]

@@ -1,0 +1,131 @@
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-02-hunks
+
+### PREPARACION ###
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-02-hunks/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ git config merge.conflictStyle zdiff3
+
+$ printf '[app]\nnombre = demo\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = info\nruta = logs/app.log\n' > config.ini
+
+$ git add config.ini
+
+$ git commit -m "base: configuracion inicial"
+[main (root-commit) 70ec72a] base: configuracion inicial
+ 1 file changed, 12 insertions(+)
+ create mode 100644 config.ini
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf '[app]\nnombre = demo-feature\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = debug\nruta = logs/app.log\n' > config.ini
+
+$ git commit -am "feature: nombre y nivel debug"
+[feature ecee01b] feature: nombre y nivel debug
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf '[app]\nnombre = demo-main\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = warn\nruta = logs/app.log\n' > config.ini
+
+$ git commit -am "main: nombre y nivel warn"
+[main dfb256b] main: nombre y nivel warn
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+### CONFLICTO ###
+
+$ git merge feature
+Auto-merging config.ini
+CONFLICT (content): Merge conflict in config.ini
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git status --short
+UU config.ini
+
+$ git diff
+diff --cc config.ini
+index e1eabd0,5443e3b..0000000
+--- a/config.ini
++++ b/config.ini
+@@@ -1,5 -1,5 +1,11 @@@
+  [app]
+++<<<<<<< HEAD
+ +nombre = demo-main
+++||||||| 70ec72a
+++nombre = demo
+++=======
++ nombre = demo-feature
+++>>>>>>> feature
+  version = 1.0
+  puerto = 8080
+  
+@@@ -8,5 -8,5 +14,11 @@@ host = localhos
+  puerto = 5432
+  
+  [log]
+++<<<<<<< HEAD
+ +nivel = warn
+++||||||| 70ec72a
+++nivel = info
+++=======
++ nivel = debug
+++>>>>>>> feature
+  ruta = logs/app.log
+  [PASS] hay dos regiones de conflicto
+
+### RESOLUCION ###
+
+$ printf '[app]\nnombre = demo (main+feature)\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = debug\nruta = logs/app.log\n' > config.ini
+
+$ cat config.ini
+[app]
+nombre = demo (main+feature)
+version = 1.0
+puerto = 8080
+
+[db]
+host = localhost
+puerto = 5432
+
+[log]
+nivel = debug
+ruta = logs/app.log
+
+$ git add config.ini
+
+$ git commit -m "merge: combina nombre y elige nivel debug"
+[main 05ee82e] merge: combina nombre y elige nivel debug
+
+### VALIDACION ###
+
+$ git status --short
+
+$ git diff --check
+
+$ git show HEAD:config.ini
+[app]
+nombre = demo (main+feature)
+version = 1.0
+puerto = 8080
+
+[db]
+host = localhost
+puerto = 5432
+
+[log]
+nivel = debug
+ruta = logs/app.log
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] no quedan marcadores en el repositorio
+  [PASS] el nombre combina ambos lados
+  [PASS] se eligio el nivel debug
+  [PASS] no se conserva el nivel warn
+
+RESULTADO: 6 PASS, 0 FAIL

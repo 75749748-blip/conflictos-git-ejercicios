@@ -1,0 +1,313 @@
+
+### PARTE A - -X ours frente a -s ours ###
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10a-estrategias
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10a-estrategias/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
+
+$ git add app.txt
+
+$ git commit -m base
+[main (root-commit) 53a9e7f] base
+ 1 file changed, 3 insertions(+)
+ create mode 100644 app.txt
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf 'linea 1\nlinea 2 (feature)\nlinea 3\n' > app.txt
+
+$ printf 'aportado por feature\n' > nueva.txt
+
+$ git add app.txt nueva.txt
+
+$ git commit -m "feature: linea 2 y nueva.txt"
+[feature a1a221a] feature: linea 2 y nueva.txt
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ create mode 100644 nueva.txt
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
+
+$ git commit -am "main: linea 2"
+[main 619cb5d] main: linea 2
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git merge --no-edit -X ours feature
+Auto-merging app.txt
+Merge made by the 'ort' strategy.
+ nueva.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 nueva.txt
+
+$ cat app.txt
+linea 1
+linea 2 (main)
+linea 3
+
+$ ls nueva.txt
+nueva.txt
+
+$ git show --stat --oneline HEAD
+be6bbd4 Merge branch 'feature'
+
+ nueva.txt | 1 +
+ 1 file changed, 1 insertion(+)
+  [PASS] -X ours conserva la linea de main
+  [PASS] -X ours conserva nueva.txt de feature
+
+$ git reset --hard HEAD~1
+HEAD is now at 619cb5d main: linea 2
+
+$ git merge --no-edit -s ours feature
+Merge made by the 'ours' strategy.
+
+$ cat app.txt
+linea 1
+linea 2 (main)
+linea 3
+
+$ if [ -e nueva.txt ]; then echo 'nueva.txt existe'; else echo 'nueva.txt NO existe'; fi
+nueva.txt NO existe
+
+$ git show --stat --oneline HEAD
+de56efe Merge branch 'feature'
+
+
+$ git diff HEAD~1 HEAD --stat
+  [PASS] -s ours conserva la linea de main
+  [PASS] -s ours descarta nueva.txt
+
+### PARTE B - rerere ###
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10b-rerere
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10b-rerere/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ git config rerere.enabled true
+
+$ git config rerere.autoUpdate true
+
+$ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
+
+$ git add app.txt
+
+$ git commit -m base
+[main (root-commit) 447b787] base
+ 1 file changed, 3 insertions(+)
+ create mode 100644 app.txt
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf 'linea 1\nlinea 2 (feature)\nlinea 3\n' > app.txt
+
+$ git commit -am "feature: linea 2"
+[feature 99a09c0] feature: linea 2
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
+
+$ git commit -am "main: linea 2"
+[main 3c01bdc] main: linea 2
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git merge feature
+Auto-merging app.txt
+CONFLICT (content): Merge conflict in app.txt
+Recorded preimage for 'app.txt'
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ cat app.txt
+linea 1
+<<<<<<< HEAD
+linea 2 (main)
+=======
+linea 2 (feature)
+>>>>>>> feature
+linea 3
+
+$ printf 'linea 1\nlinea 2 (main + feature)\nlinea 3\n' > app.txt
+
+$ git add app.txt
+
+$ git rerere status
+app.txt
+
+$ git commit -m "merge: resolucion registrada por rerere"
+Recorded resolution for 'app.txt'.
+[main 4895465] merge: resolucion registrada por rerere
+
+$ git reset --hard HEAD~1
+HEAD is now at 3c01bdc main: linea 2
+
+$ git merge feature
+Auto-merging app.txt
+CONFLICT (content): Merge conflict in app.txt
+Staged 'app.txt' using previous resolution.
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git status --short
+M  app.txt
+
+$ cat app.txt
+linea 1
+linea 2 (main + feature)
+linea 3
+
+$ git add app.txt
+
+$ git commit -m "merge: rerere reutiliza la resolucion"
+[main d1452b5] merge: rerere reutiliza la resolucion
+
+$ git log --oneline --graph --all --decorate
+*   d1452b5 (HEAD -> main) merge: rerere reutiliza la resolucion
+|\  
+| * 99a09c0 (feature) feature: linea 2
+* | 3c01bdc main: linea 2
+|/  
+* 447b787 base
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] no quedan marcadores en el repositorio
+  [PASS] rerere aplico la resolucion combinada
+  [PASS] existe cache de rerere
+
+### PARTE C - merge=union y merge=ours ###
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10c-drivers
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-10c-drivers/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ printf 'deps.lock merge=union\n' > .gitattributes
+
+$ printf 'lock-a\n' > deps.lock
+
+$ git add .gitattributes deps.lock
+
+$ git commit -m "main: lockfile con merge=union"
+[main (root-commit) 3d2b0b8] main: lockfile con merge=union
+ 2 files changed, 2 insertions(+)
+ create mode 100644 .gitattributes
+ create mode 100644 deps.lock
+
+$ git switch -c feature-union
+Switched to a new branch 'feature-union'
+
+$ printf 'lock-b\n' > deps.lock
+
+$ git commit -am "feature: lock-b"
+[feature-union ce9b35b] feature: lock-b
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'lock-main\n' > deps.lock
+
+$ git commit -am "main: lock-main"
+[main c1ab437] main: lock-main
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git merge --no-edit feature-union
+Auto-merging deps.lock
+Merge made by the 'ort' strategy.
+ deps.lock | 1 +
+ 1 file changed, 1 insertion(+)
+
+$ cat deps.lock
+lock-main
+lock-b
+
+$ git check-attr merge deps.lock
+deps.lock: merge: union
+  [PASS] union conserva lock-main
+  [PASS] union conserva lock-b
+  [PASS] union no deja marcadores
+
+$ printf '*.ours merge=ours\n' >> .gitattributes
+
+$ git config merge.ours.driver true
+
+$ printf 'base\n' > config.ours
+
+$ git add .gitattributes config.ours
+
+$ git commit -m "main: driver ours"
+[main 221a983] main: driver ours
+ 2 files changed, 2 insertions(+)
+ create mode 100644 config.ours
+
+$ git switch -c feature-ours
+Switched to a new branch 'feature-ours'
+
+$ printf 'feature\n' > config.ours
+
+$ git commit -am "feature: config.ours"
+[feature-ours 17ac589] feature: config.ours
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'main\n' > config.ours
+
+$ git commit -am "main: config.ours"
+[main 108525f] main: config.ours
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git merge --no-edit feature-ours
+Auto-merging config.ours
+Merge made by the 'ort' strategy.
+
+$ cat config.ours
+main
+
+$ git check-attr merge config.ours
+config.ours: merge: ours
+  [PASS] merge=ours conserva main
+  [PASS] merge=ours no aplica feature
+
+### VALIDACION FINAL ###
+
+$ git status --short
+
+$ git diff --check
+
+$ git log --oneline --graph --all --decorate
+*   afe2a9d (HEAD -> main) Merge branch 'feature-ours'
+|\  
+| * 17ac589 (feature-ours) feature: config.ours
+* | 108525f main: config.ours
+|/  
+* 221a983 main: driver ours
+*   0c44bfd Merge branch 'feature-union'
+|\  
+| * ce9b35b (feature-union) feature: lock-b
+* | c1ab437 main: lock-main
+|/  
+* 3d2b0b8 main: lockfile con merge=union
+  [PASS] el arbol de trabajo queda limpio (drivers)
+  [PASS] no quedan marcadores (drivers)
+
+RESULTADO: 15 PASS, 0 FAIL

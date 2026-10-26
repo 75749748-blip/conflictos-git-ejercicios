@@ -1,0 +1,129 @@
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-04-add-add
+
+### PREPARACION ###
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-04-add-add/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ git config merge.conflictStyle zdiff3
+
+$ printf 'node_modules/\n' > .gitignore
+
+$ git add .gitignore
+
+$ git commit -m "base: ignora node_modules"
+[main (root-commit) 0a04b63] base: ignora node_modules
+ 1 file changed, 1 insertion(+)
+ create mode 100644 .gitignore
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf '# Changelog\n\n## 1.1.0\n- Login\n' > CHANGELOG.md
+
+$ git add CHANGELOG.md
+
+$ git commit -m "feature: changelog 1.1.0"
+[feature 7ff802d] feature: changelog 1.1.0
+ 1 file changed, 4 insertions(+)
+ create mode 100644 CHANGELOG.md
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf '# Changelog\n\n## 1.0.1\n- Dashboard\n' > CHANGELOG.md
+
+$ git add CHANGELOG.md
+
+$ git commit -m "main: changelog 1.0.1"
+[main fb4f7ae] main: changelog 1.0.1
+ 1 file changed, 4 insertions(+)
+ create mode 100644 CHANGELOG.md
+
+### CONFLICTO ###
+
+$ git merge feature
+Auto-merging CHANGELOG.md
+CONFLICT (add/add): Merge conflict in CHANGELOG.md
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git status --short
+AA CHANGELOG.md
+
+$ git diff
+diff --cc CHANGELOG.md
+index e314405,5f55ad3..0000000
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@@ -1,4 -1,4 +1,10 @@@
+  # Changelog
+  
+++<<<<<<< HEAD
+ +## 1.0.1
+ +- Dashboard
+++||||||| 0a04b63
+++=======
++ ## 1.1.0
++ - Login
+++>>>>>>> feature
+
+$ cat CHANGELOG.md
+# Changelog
+
+<<<<<<< HEAD
+## 1.0.1
+- Dashboard
+||||||| 0a04b63
+=======
+## 1.1.0
+- Login
+>>>>>>> feature
+
+$ git ls-files -u
+100644 e3144050f197bf62bd15da71abe1ef9d59d0b1a5 2	CHANGELOG.md
+100644 5f55ad325a24459ef8f545b6dbaec531755b9923 3	CHANGELOG.md
+
+### RESOLUCION ###
+
+$ printf '# Changelog\n\n## 1.1.0\n- Login\n\n## 1.0.1\n- Dashboard\n' > CHANGELOG.md
+
+$ cat CHANGELOG.md
+# Changelog
+
+## 1.1.0
+- Login
+
+## 1.0.1
+- Dashboard
+
+$ git add CHANGELOG.md
+
+$ git commit -m "merge: unifica changelog con las entradas 1.1.0 y 1.0.1"
+[main a28d13e] merge: unifica changelog con las entradas 1.1.0 y 1.0.1
+
+### VALIDACION ###
+
+$ git status --short
+
+$ git diff --check
+
+$ git show HEAD:CHANGELOG.md
+# Changelog
+
+## 1.1.0
+- Login
+
+## 1.0.1
+- Dashboard
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] no quedan marcadores en el repositorio
+  [PASS] el changelog conserva la version 1.1.0
+  [PASS] el changelog conserva la version 1.0.1
+  [PASS] existe un commit de merge
+
+RESULTADO: 5 PASS, 0 FAIL

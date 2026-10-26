@@ -1,0 +1,22 @@
+flowchart TD
+  A["Dos ramas divergen"] --> B["Operación de integración<br/>merge · rebase · cherry-pick · stash"]
+  B --> C{"¿Los cambios se solapan?"}
+  C -->|"No"| D["Fusión automática"]
+  C -->|"Sí"| E["Conflicto"]
+  E --> F["Marcadores en el archivo"]
+  F --> G["Diagnóstico<br/>base · ours · theirs"]
+  G --> H{"Decisión"}
+  H -->|"Combinar"| I["Edición manual"]
+  H -->|"Elegir lado"| J["ours / theirs"]
+  H -->|"Herramienta"| K["mergetool"]
+  H -->|"Cancelar"| L["--abort"]
+  I --> M["git add / git rm"]
+  J --> M
+  K --> M
+  M --> N["Validar<br/>diff --check + tests"]
+  N --> O["Cerrar<br/>commit / --continue"]
+  O --> P["Verificar historia"]
+  E -.-> Q["rerere"]
+  Q -.-> I
+  D --> P
+  L --> R["Estado anterior"]

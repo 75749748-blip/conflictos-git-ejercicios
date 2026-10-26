@@ -1,0 +1,107 @@
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-08-stash
+
+### PREPARACION ###
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-08-stash/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ git config merge.conflictStyle zdiff3
+
+$ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
+
+$ git add app.txt
+
+$ git commit -m base
+[main (root-commit) d0d3c21] base
+ 1 file changed, 3 insertions(+)
+ create mode 100644 app.txt
+
+$ printf 'linea 1\nlinea 2 (WIP)\nlinea 3\n' > app.txt
+
+$ git stash push -m "wip: linea 2"
+Saved working directory and index state On main: wip: linea 2
+
+$ git stash list
+stash@{0}: On main: wip: linea 2
+
+$ printf 'linea 1\nlinea 2 (commit)\nlinea 3\n' > app.txt
+
+$ git commit -am "main: cambia la linea 2"
+[main d4f42c1] main: cambia la linea 2
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+### CONFLICTO ###
+
+$ git stash pop
+Auto-merging app.txt
+CONFLICT (content): Merge conflict in app.txt
+On branch main
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	both modified:   app.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+The stash entry is kept in case you need it again.
+[exit 1]
+
+$ git status --short
+UU app.txt
+
+$ git stash list
+stash@{0}: On main: wip: linea 2
+
+$ cat app.txt
+linea 1
+<<<<<<< Updated upstream
+linea 2 (commit)
+||||||| Stash base
+linea 2
+=======
+linea 2 (WIP)
+>>>>>>> Stashed changes
+linea 3
+
+### RESOLUCION ###
+
+$ printf 'linea 1\nlinea 2 (commit + WIP)\nlinea 3\n' > app.txt
+
+$ cat app.txt
+linea 1
+linea 2 (commit + WIP)
+linea 3
+
+$ git add app.txt
+
+$ git stash drop
+Dropped refs/stash@{0} (9932d48a32abb505cdbe8ff47a17ddac7089bafd)
+
+$ git commit -m "feat: recupera el WIP combinado con el cambio de main"
+[main 569e045] feat: recupera el WIP combinado con el cambio de main
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+### VALIDACION ###
+
+$ git status --short
+
+$ git stash list
+
+$ git show HEAD:app.txt
+linea 1
+linea 2 (commit + WIP)
+linea 3
+
+$ git log --oneline --graph --all --decorate
+* 569e045 (HEAD -> main) feat: recupera el WIP combinado con el cambio de main
+* d4f42c1 main: cambia la linea 2
+* d0d3c21 base
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] no quedan marcadores en el repositorio
+  [PASS] se combinan commit y WIP
+  [PASS] el stash se elimino despues de resolver
+
+RESULTADO: 4 PASS, 0 FAIL

@@ -1,0 +1,28 @@
+# Dependencias y artefactos de construcción
+build/node_modules/
+build/pdf-preview/
+build/*.pdf
+build/guia-body.html
+build/guia-cover.html
+build/cover.pdf
+build/body.pdf
+build/test-*.pptx
+build/test-*.pdf
+build/test-*.svg
+build/test-*.mmd
+build/vb.js
+build/check-*.js
+build/summary.js
+build/list-commands.js
+build/count-logs.js
+
+# Repositorios temporales de los ejercicios
+.work/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Artefactos de prueba
+build/test*

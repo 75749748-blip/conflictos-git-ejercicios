@@ -1,0 +1,101 @@
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-05-binario
+
+### PREPARACION ###
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-05-binario/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ printf '*.bin binary\n' > .gitattributes
+
+$ printf 'version 1\n' > logo.bin
+
+$ git add .gitattributes logo.bin
+
+$ git commit -m "base: logo v1 y atributo binario"
+[main (root-commit) 505d643] base: logo v1 y atributo binario
+ 2 files changed, 1 insertion(+)
+ create mode 100644 .gitattributes
+ create mode 100644 logo.bin
+
+$ git check-attr -a -- logo.bin
+logo.bin: binary: set
+logo.bin: diff: unset
+logo.bin: merge: unset
+logo.bin: text: unset
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf 'version FEATURE\n' > logo.bin
+
+$ git commit -am "feature: version FEATURE del logo"
+[feature fda3328] feature: version FEATURE del logo
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'version MAIN\n' > logo.bin
+
+$ git commit -am "main: version MAIN del logo"
+[main 98194e7] main: version MAIN del logo
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+### CONFLICTO ###
+
+$ git merge feature
+warning: Cannot merge binary files: logo.bin (HEAD vs. feature)
+Auto-merging logo.bin
+CONFLICT (content): Merge conflict in logo.bin
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git status --short
+UU logo.bin
+
+$ git diff
+diff --cc logo.bin
+index 4ed3b23,2ce1430..0000000
+Binary files differ
+
+$ cat logo.bin
+version MAIN
+
+### RESOLUCION ###
+
+$ git checkout --theirs -- logo.bin
+
+$ cat logo.bin
+version FEATURE
+
+$ git add logo.bin
+
+$ git commit -m "merge: usa la version FEATURE del logo binario"
+[main 64b0274] merge: usa la version FEATURE del logo binario
+
+### VALIDACION ###
+
+$ git status --short
+
+$ git diff --check
+
+$ cat logo.bin
+version FEATURE
+
+$ git log --oneline --graph --all --decorate
+*   64b0274 (HEAD -> main) merge: usa la version FEATURE del logo binario
+|\  
+| * fda3328 (feature) feature: version FEATURE del logo
+* | 98194e7 main: version MAIN del logo
+|/  
+* 505d643 base: logo v1 y atributo binario
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] se eligio la version FEATURE
+  [PASS] no se conserva la version MAIN
+  [PASS] existe un commit de merge
+
+RESULTADO: 4 PASS, 0 FAIL

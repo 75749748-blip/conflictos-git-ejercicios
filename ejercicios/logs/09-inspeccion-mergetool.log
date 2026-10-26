@@ -1,0 +1,177 @@
+workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion
+
+### PREPARACION ###
+
+$ git init -b main
+Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion/.git/
+
+$ git config user.name Alumno
+
+$ git config user.email alumno@example.com
+
+$ printf 'valor = 1\n' > config.txt
+
+$ git add config.txt
+
+$ git commit -m "base: valor 1"
+[main (root-commit) f1417e5] base: valor 1
+ 1 file changed, 1 insertion(+)
+ create mode 100644 config.txt
+
+$ git switch -c feature
+Switched to a new branch 'feature'
+
+$ printf 'valor = 2\n' > config.txt
+
+$ git commit -am "feature: valor 2"
+[feature 09fda2d] feature: valor 2
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git switch main
+Switched to branch 'main'
+
+$ printf 'valor = 3\n' > config.txt
+
+$ git commit -am "main: valor 3"
+[main d9589ca] main: valor 3
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git config merge.conflictStyle diff3
+
+### CONFLICTO ###
+
+$ git merge feature
+Auto-merging config.txt
+CONFLICT (content): Merge conflict in config.txt
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   config.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git diff
+diff --cc config.txt
+index 035cc36,3d2355f..0000000
+--- a/config.txt
++++ b/config.txt
+@@@ -1,1 -1,1 +1,7 @@@
+++<<<<<<< HEAD
+ +valor = 3
+++||||||| f1417e5
+++valor = 1
+++=======
++ valor = 2
+++>>>>>>> feature
+
+$ git show :1:config.txt
+valor = 1
+
+$ git show :2:config.txt
+valor = 3
+
+$ git show :3:config.txt
+valor = 2
+
+$ git log --merge --oneline -- config.txt
+d9589ca main: valor 3
+09fda2d feature: valor 2
+
+$ git diff --base -- config.txt
+* Unmerged path config.txt
+diff --git a/config.txt b/config.txt
+index b428fb3..1df67fa 100644
+--- a/config.txt
++++ b/config.txt
+@@ -1 +1,7 @@
++<<<<<<< HEAD
++valor = 3
++||||||| f1417e5
+ valor = 1
++=======
++valor = 2
++>>>>>>> feature
+
+$ cat config.txt
+<<<<<<< HEAD
+valor = 3
+||||||| f1417e5
+valor = 1
+=======
+valor = 2
+>>>>>>> feature
+
+### MERGECOLL - HERRAMIENTA PERSONALIZADA ###
+
+$ cat resolver.sh
+#!/usr/bin/env bash
+# Herramienta de merge no interactiva para la demostracion.
+# Argumentos de git mergetool: BASE LOCAL REMOTE MERGED
+printf 'valor = 5\n' > "$4"
+exit 0
+
+$ git config merge.tool resolver
+
+$ git config mergetool.prompt false
+
+$ git config mergetool.resolver.cmd "/c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion/resolver.sh "$BASE" "$LOCAL" "$REMOTE" "$MERGED""
+
+$ git config --get mergetool.resolver.cmd
+C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion/resolver.sh "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+
+$ printf 'y\n' | git mergetool --tool=resolver
+Merging:
+config.txt
+
+Normal merge conflict for 'config.txt':
+  {local}: modified file
+  {remote}: modified file
+
+$ git status --short
+M  config.txt
+?? config.txt.orig
+?? resolver.sh
+
+$ cat config.txt
+valor = 5
+
+### RESOLUCION ###
+
+$ git commit -m "merge: resuelve config.txt con mergetool"
+[main 4cea9cb] merge: resuelve config.txt con mergetool
+
+$ cat config.txt
+valor = 5
+
+$ rm -f resolver.sh config.txt.orig
+
+### VALIDACION ###
+
+$ git status --short
+
+$ git diff --check
+
+$ git show HEAD:config.txt
+valor = 5
+
+$ git log --oneline --graph --all --decorate
+*   4cea9cb (HEAD -> main) merge: resuelve config.txt con mergetool
+|\  
+| * 09fda2d (feature) feature: valor 2
+* | d9589ca main: valor 3
+|/  
+* f1417e5 base: valor 1
+  [PASS] el arbol de trabajo queda limpio
+  [PASS] no quedan marcadores en el repositorio
+  [PASS] el valor final es 5
+  [PASS] existe un commit de merge
+
+RESULTADO: 4 PASS, 0 FAIL
