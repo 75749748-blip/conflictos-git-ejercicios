@@ -15,6 +15,14 @@ build/check-*.js
 build/summary.js
 build/list-commands.js
 build/count-logs.js
+build/doc-cover.html
+build/doc-body.html
+build/doc-cover.pdf
+build/doc-body.pdf
+build/doc-preview*/
+build/render-doc*.js
+build/repair-mojibake.js
+build/shot-github.js
 
 # Repositorios temporales de los ejercicios
 .work/

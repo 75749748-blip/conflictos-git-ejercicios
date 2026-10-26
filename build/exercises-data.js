@@ -34,7 +34,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Resolución y validación',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat app.txt', 'git add app.txt', 'git commit -m', 'git status --short', 'git diff --check', 'git log --oneline', 'git show HEAD:app.txt'],
+        include: ['cat app.txt', 'git add app.txt', 'git commit -m', 'git status --short', 'git diff --check', 'git log --oneline', 'git show HEAD:app.txt'],
         checks: true
       }
     ]
@@ -68,7 +68,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Resolución por bloque y validación',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat config.ini', 'git add config.ini', 'git commit -m', 'git status --short', 'git diff --check', 'git show HEAD:config.ini'],
+        include: ['cat config.ini', 'git add config.ini', 'git commit -m', 'git status --short', 'git diff --check', 'git show HEAD:config.ini'],
         checks: true
       }
     ]
@@ -136,7 +136,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Changelog unificado y validación',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat CHANGELOG.md', 'git add CHANGELOG.md', 'git commit -m', 'git status --short', 'git diff --check', 'git show HEAD:CHANGELOG.md'],
+        include: ['cat CHANGELOG.md', 'git add CHANGELOG.md', 'git commit -m', 'git status --short', 'git diff --check', 'git show HEAD:CHANGELOG.md'],
         checks: true
       }
     ]
@@ -205,7 +205,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Continuación y validación lineal',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat version.txt', 'git add version.txt', 'env GIT_EDITOR', 'git status --short', 'git log --oneline', 'git show HEAD:version.txt'],
+        include: ['cat version.txt', 'git add version.txt', 'env GIT_EDITOR', 'git status --short', 'git log --oneline', 'git show HEAD:version.txt'],
         checks: true
       }
     ]
@@ -239,7 +239,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Continuación y validación',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat app.txt', 'git add app.txt', 'env GIT_EDITOR', 'git status --short', 'git log --oneline', 'git show HEAD:app.txt'],
+        include: ['cat app.txt', 'git add app.txt', 'env GIT_EDITOR', 'git status --short', 'git log --oneline', 'git show HEAD:app.txt'],
         checks: true
       }
     ]
@@ -274,7 +274,7 @@ const exercises = [
         id: '02-resolucion',
         label: 'Resolución, drop y validación',
         sections: ['RESOLUCION', 'VALIDACION'],
-        include: ['printf', 'cat app.txt', 'git add app.txt', 'git stash drop', 'git commit -m', 'git status --short', 'git stash list', 'git show HEAD:app.txt', 'git log --oneline'],
+        include: ['cat app.txt', 'git add app.txt', 'git stash drop', 'git commit -m', 'git status --short', 'git stash list', 'git show HEAD:app.txt', 'git log --oneline'],
         checks: true
       }
     ]
@@ -349,7 +349,7 @@ const exercises = [
         id: '02-rerere',
         label: 'Parte B: rerere reutiliza la resolución',
         sections: ['PARTE B - rerere'],
-        include: ['git merge feature', 'cat app.txt', 'printf', 'git add app.txt', 'git rerere status', 'git commit -m "merge: resolucion', 'git reset --hard', 'git status --short', 'git commit -m "merge: rerere', 'git log --oneline'],
+        include: ['git merge feature', 'cat app.txt', 'git add app.txt', 'git rerere status', 'git commit -m "merge: resolucion', 'git reset --hard', 'git status --short', 'git commit -m "merge: rerere', 'git log --oneline'],
         checks: false
       },
       {

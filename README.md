@@ -2,7 +2,7 @@
 
 Documentación y evidencia de los **10 ejercicios prácticos** de la guía de conflictos de Git. Cada ejercicio se ejecutó en un repositorio temporal real, se resolvió y se validó con comprobaciones automáticas.
 
-> **Resultado global:** 10/10 ejercicios ejecutados, **61 comprobaciones PASS y 0 FAIL**.
+> **Resultado global:** 10/10 ejercicios ejecutados, **57 comprobaciones PASS y 0 FAIL**.
 >
 > **Repositorio:** <https://github.com/75749748-blip/conflictos-git-ejercicios>
 >
@@ -62,7 +62,7 @@ bash 06-rebase.sh
 
 ## Evidencia
 
-- **24 capturas de terminal** en [`capturas/`](capturas/): conflicto, diagnóstico, resolución y validación de cada ejercicio.
+- **23 capturas de terminal** en [`capturas/`](capturas/): conflicto, diagnóstico, resolución y validación de cada ejercicio.
 - Las capturas se generan a partir de los logs reales con `build/make-captures.js`; no son maquetas.
 - Cada log contiene la salida de Git, los comandos ejecutados y el bloque `RESULTADO: N PASS, 0 FAIL`.
 - El PDF de documentación reúne las capturas, la explicación y la validación de los 10 ejercicios.

@@ -8,7 +8,7 @@ const ROOT = path.resolve(BUILD, '..');
 const LOGS = path.join(ROOT, 'ejercicios', 'logs');
 const OUT = path.join(ROOT, 'capturas');
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const MAX_LINES = 55;
+const MAX_LINES = 60;
 
 function parseSections(file) {
   const lines = fs.readFileSync(path.join(LOGS, file), 'utf8').replace(/\r/g, '').split('\n');
