@@ -221,7 +221,7 @@ function bodyHtml() {
     <section class="exercise">
       <div class="kicker">Cierre · evidencia de publicación</div>
       <h2>Repositorio en GitHub</h2>
-      <p>Los scripts, logs, capturas, la guía y la presentación están publicados en el repositorio. La siguiente captura corresponde a la página pública después del primer push.</p>
+      <p>Los scripts, logs, capturas, la guía y la presentación están publicados en el repositorio. La siguiente captura corresponde a la página pública después de publicar la guía, la presentación y la documentación.</p>
       <div class="github"><img src="${dataUri('capturas/github-repo.png')}" alt="Repositorio conflictos-git-ejercicios en GitHub"></div>
       <div class="repo"><strong>URL:</strong> <a href="${esc(REPO_URL)}">${esc(REPO_URL)}</a><br><strong>Commit inicial:</strong> df0706c · <strong>Rama:</strong> main · <strong>Visibilidad:</strong> pública</div>
       <div class="callout"><strong>Declaración de verificación.</strong> Los diez ejercicios fueron ejecutados en este equipo con Git 2.56.0.windows.1. Los logs muestran ${totalPass} comprobaciones PASS y ${totalFail} FAIL. Las capturas se obtuvieron de esos logs. El repositorio de GitHub contiene el código y la evidencia para que cualquier persona pueda repetir el proceso.</div>
