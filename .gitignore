@@ -20,7 +20,15 @@ build/doc-body.html
 build/doc-cover.pdf
 build/doc-body.pdf
 build/doc-preview*/
+build/ppt-preview*/
 build/render-doc*.js
+build/render-ppt*.js
+build/bisect-*
+build/dbg-*
+build/debug-ppt.js
+build/gen-bisect.js
+build/check-anim.ps1
+build/*.pptx
 build/repair-mojibake.js
 build/shot-github.js
 

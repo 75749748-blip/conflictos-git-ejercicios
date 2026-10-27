@@ -16,7 +16,8 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 |---|---|
 | Guía completa (Markdown) | [Guia-Conflictos-Git.md](Guia-Conflictos-Git.md) |
 | Guía completa (PDF) | [Guia-Conflictos-Git.pdf](Guia-Conflictos-Git.pdf) |
-| Presentación animada | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
+| Presentación animada (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
+| Presentación animada (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
 | Documentación con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
 | Capturas de las sesiones | [capturas/](capturas/) |
 | Scripts y logs | [ejercicios/](ejercicios/) |
@@ -35,6 +36,14 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 | 08 | Stash pop | `Updated upstream` / `Stashed changes` | [08](ejercicios/08-stash.sh) | [log](ejercicios/logs/08-stash.log) | 4 PASS · 0 FAIL |
 | 09 | Inspección y mergetool | Etapas `:1: :2: :3:`, `diff3`, herramienta | [09](ejercicios/09-inspeccion-mergetool.sh) | [log](ejercicios/logs/09-inspeccion-mergetool.log) | 4 PASS · 0 FAIL |
 | 10 | Estrategias y automatización | `-X ours`, `-s ours`, `rerere`, drivers | [10](ejercicios/10-estrategias.sh) | [log](ejercicios/logs/10-estrategias.log) | 15 PASS · 0 FAIL |
+
+## Presentación
+
+La presentación tiene **20 diapositivas en 16:9**, con transiciones, animaciones de entrada, notas del expositor y los dos mapas de la guía. Está pensada para una exposición de 15–20 minutos.
+
+- `Conflictos-Git-Presentacion.pptx`: versión editable con animaciones.
+- `Conflictos-Git-Presentacion.pdf`: versión lista para proyectar o imprimir.
+- Fuente: `build/make-ppt.js`; animación aplicada con `build/animate-ppt.ps1`.
 
 ## Cómo reproducirlo
 
@@ -74,6 +83,7 @@ bash 06-rebase.sh
 ├── Guia-Conflictos-Git.md
 ├── Guia-Conflictos-Git.pdf
 ├── Conflictos-Git-Presentacion.pptx
+├── Conflictos-Git-Presentacion.pdf
 ├── documentacion/
 │   └── Documentacion-Ejercicios-Conflictos-Git.pdf
 ├── capturas/
@@ -90,7 +100,11 @@ bash 06-rebase.sh
 └── build/
     ├── make-pdf.js
     ├── make-captures.js
-    └── exercises-data.js
+    ├── make-doc.js
+    ├── make-ppt.js
+    ├── animate-ppt.ps1
+    ├── exercises-data.js
+    └── mapa-mental.png / mapa-conceptual-compact.png
 ```
 
 ## Nota sobre los repositorios de práctica
