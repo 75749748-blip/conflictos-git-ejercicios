@@ -1,6 +1,6 @@
 # Conflictos de código en Git — Ejercicios verificados
 
-Documentación y evidencia de los **10 ejercicios prácticos** de la guía de conflictos de Git. Cada ejercicio se ejecutó en un repositorio temporal real, se resolvió y se validó con comprobaciones automáticas.
+Documentación y evidencia de los **10 ejercicios prácticos** de la guía de conflictos de Git. Cada ejercicio se ejecutó en un repositorio temporal real, se resolvió y se validó con comprobaciones automáticas. La **guía simple** es la entrega principal; la guía completa y la documentación técnica quedan como material de ampliación.
 
 > **Resultado global:** 10/10 ejercicios ejecutados, **57 comprobaciones PASS y 0 FAIL**.
 >
@@ -14,12 +14,12 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 
 | Documento | Enlace |
 |---|---|
+| **Guía simple (PDF)** | **[documentacion/Conflictos-Git-Guia-Simple.pdf](documentacion/Conflictos-Git-Guia-Simple.pdf)** |
+| Mapa mental (Canvas HTML5) | [mapa-mental/mapa-mental.html](mapa-mental/mapa-mental.html) · [PNG](mapa-mental/mapa-mental.png) · [vista documentada](mapa-mental/vista-documentada.png) |
 | Guía completa (Markdown) | [Guia-Conflictos-Git.md](Guia-Conflictos-Git.md) |
 | Guía completa (PDF) | [Guia-Conflictos-Git.pdf](Guia-Conflictos-Git.pdf) |
 | Presentación animada (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
 | Presentación animada (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
-| **Guía simple (PDF)** | **[documentacion/Conflictos-Git-Guia-Simple.pdf](documentacion/Conflictos-Git-Guia-Simple.pdf)** |
-| Mapa mental (Canvas HTML5) | [mapa-mental/mapa-mental.html](mapa-mental/mapa-mental.html) · [PNG](mapa-mental/mapa-mental.png) |
 | Documentación técnica con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
 | Capturas de las sesiones | [capturas/](capturas/) |
 | Scripts y logs | [ejercicios/](ejercicios/) |
