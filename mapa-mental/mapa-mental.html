@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa mental · Conflictos de Git (Canvas HTML5)</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --paper:#f8fafc;
+    --teal:#0d9488; --blue:#2563eb; --amber:#d97706; --rose:#e11d48; --green:#16a34a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef2f7; color:var(--ink);
+    font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+  }
+  .page{max-width:1480px;margin:0 auto;padding:32px 24px 64px}
+  header.top{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between;margin:0 0 22px}
+  .kicker{font-size:12px;letter-spacing:.2em;font-weight:800;color:#0f766e;text-transform:uppercase}
+  h1{margin:6px 0 8px;font-size:34px;line-height:1.05;letter-spacing:-.02em}
+  header.top p{margin:0;color:#475569;font-size:15px;max-width:640px;line-height:1.55}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  button{
+    border:0;border-radius:999px;padding:11px 18px;font:600 13.5px 'Segoe UI',Arial,sans-serif;
+    cursor:pointer;background:#0f172a;color:#fff;transition:transform .15s,opacity .15s;
+  }
+  button.alt{background:#fff;color:#0f172a;border:1px solid #cbd5e1}
+  button:hover{transform:translateY(-1px);opacity:.92}
+  .sheet{
+    background:#fff;border:1px solid #dbe3ec;border-radius:22px;padding:14px;
+    box-shadow:0 24px 60px rgba(15,23,42,.12);
+  }
+  .canvas-wrap{position:relative;border-radius:14px;overflow:hidden;background:#f8fafc}
+  canvas{display:block;width:100%;height:auto}
+  .hint{margin:10px 4px 2px;font-size:12.5px;color:#64748b}
+  .legend{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 0}
+  .legend article{
+    background:#fff;border:1px solid #e2e8f0;border-left:6px solid var(--c,#0d9488);
+    border-radius:14px;padding:16px 18px;box-shadow:0 6px 18px rgba(15,23,42,.05)
+  }
+  .legend h3{margin:0 0 6px;font-size:16.5px;display:flex;align-items:center;gap:9px}
+  .legend .n{
+    width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+    background:#f1f5f9;color:var(--c);border:1.5px solid var(--c);font-size:13px;font-weight:800
+  }
+  .legend p{margin:0 0 6px;color:#475569;font-size:13.5px;line-height:1.5}
+  .legend code{font:600 12.5px Consolas,monospace;color:#0f172a;background:#f1f5f9;padding:2px 6px;border-radius:6px}
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:20px}
+  .panel{background:#0f172a;color:#e2e8f0;border-radius:18px;padding:22px 24px}
+  .panel h2{margin:0 0 10px;font-size:19px;color:#fff}
+  .panel p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#cbd5e1}
+  .panel b{color:#5eead4}
+  .panel .flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .panel .flow span{
+    font-size:12px;font-weight:700;letter-spacing:.02em;padding:7px 11px;border-radius:999px;
+    background:rgba(94,234,212,.12);color:#99f6e4;border:1px solid rgba(94,234,212,.35)
+  }
+  .notes{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px 24px}
+  .notes h2{margin:0 0 8px;font-size:19px}
+  .notes ul{margin:0;padding-left:18px;color:#475569;font-size:13.5px;line-height:1.65}
+  .notes li{margin-bottom:6px}
+  .notes strong{color:#0f172a}
+  footer.foot{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;color:#64748b;font-size:12.5px}
+  @media (max-width:900px){
+    .legend{grid-template-columns:1fr 1fr}
+    .two{grid-template-columns:1fr}
+  }
+  @media (max-width:620px){
+    .legend{grid-template-columns:1fr}
+    h1{font-size:27px}
+  }
+  @media print{
+    body{background:#fff}
+    .page{max-width:none;padding:0}
+    .actions,.hint,header.top p{display:none}
+    .sheet{border:0;box-shadow:none;padding:0}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="kicker">Documentación visual · Git</div>
+      <h1>Mapa mental: resolver un conflicto</h1>
+      <p>Cinco ramas, una idea: Git pausa la operación y tú decides. El mapa está dibujado con <strong>Canvas HTML5</strong> real, sin imágenes externas, y se puede exportar en alta resolución.</p>
+    </div>
+    <div class="actions">
+      <button onclick="downloadPng()">Descargar PNG</button>
+      <button class="alt" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="canvas-wrap">
+      <canvas id="mindmap" width="1800" height="1250" role="img"
+        aria-label="Mapa mental de cinco pasos para resolver conflictos de Git: detectar, entender, resolver, verificar y prevenir"></canvas>
+    </div>
+    <div class="hint">Canvas 1800 × 1250 px · exportación a 2× (3600 × 2500 px) · se adapta al ancho de la pantalla.</div>
+  </div>
+
+  <section class="legend" aria-label="Explicación de cada rama">
+    <article style="--c:#0d9488">
+      <h3><span class="n">1</span> Detectar</h3>
+      <p>Git avisa que no pudo unir dos cambios. Los archivos aparecen como <code>UU</code> y el archivo contiene marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>.</p>
+      <p><strong>Primero:</strong> <code>git status --short</code></p>
+    </article>
+    <article style="--c:#2563eb">
+      <h3><span class="n">2</span> Entender</h3>
+      <p>No se trata de borrar marcas, sino de saber qué quería cada lado. Compara tu versión, la del otro y la base común.</p>
+      <p><strong>Clave:</strong> <code>git diff</code> y <code>git show :1: :2: :3:</code></p>
+    </article>
+    <article style="--c:#d97706">
+      <h3><span class="n">3</span> Resolver</h3>
+      <p>Elige una versión, combina las dos o elimina el archivo. Después borra todos los marcadores y guarda el resultado.</p>
+      <p><strong>Regla:</strong> una decisión por cada bloque.</p>
+    </article>
+    <article style="--c:#e11d48">
+      <h3><span class="n">4</span> Verificar</h3>
+      <p>Comprueba que no quedan marcas, que las pruebas pasan y que el árbol queda limpio antes de confirmar.</p>
+      <p><strong>Clave:</strong> <code>git diff --check</code></p>
+    </article>
+    <article style="--c:#16a34a">
+      <h3><span class="n">5</span> Prevenir</h3>
+      <p>Los conflictos se reducen con ramas cortas, integraciones frecuentes y avisos cuando dos personas tocan lo mismo.</p>
+      <p><strong>Hábito:</strong> integrar seguido.</p>
+    </article>
+    <article style="--c:#64748b;border-left-color:#64748b">
+      <h3><span class="n" style="--c:#64748b;border-color:#94a3b8;color:#64748b">✓</span> Resultado</h3>
+      <p>Un conflicto no es un error: es una pausa para tomar una decisión. Al terminarlo, el historial sigue y el trabajo de ambos lados se conserva.</p>
+    </article>
+  </section>
+
+  <section class="two">
+    <div class="panel">
+      <h2>El método en 4 pasos</h2>
+      <p>Las cuatro primeras ramas son el ciclo de resolución. La quinta es lo que evita repetirlo:</p>
+      <p><b>1.</b> Detecta el estado y los archivos afectados. <b>2.</b> Entiende las dos versiones. <b>3.</b> Resuelve bloque por bloque. <b>4.</b> Verifica y confirma.</p>
+      <div class="flow">
+        <span>Detectar</span><span>Entender</span><span>Resolver</span><span>Verificar</span><span>Prevenir</span>
+      </div>
+    </div>
+    <div class="notes">
+      <h2>Por qué está hecho en canvas</h2>
+      <ul>
+        <li><strong>Un solo archivo:</strong> el mapa se dibuja con JavaScript y no depende de imágenes ni servicios externos.</li>
+        <li><strong>Editable:</strong> los textos y colores están en un arreglo de datos al inicio del script.</li>
+        <li><strong>Exportable:</strong> el botón genera un PNG de 3600 × 2500 px listo para el documento o una diapositiva.</li>
+        <li><strong>Accesible:</strong> el canvas incluye una descripción y la explicación de las cinco ramas está en HTML.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Mapa mental · Conflictos de Git · Canvas HTML5</span>
+    <span>Regla de oro: si no entiendes el cambio, no lo resuelvas.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('mindmap');
+  const ctx = canvas.getContext('2d');
+  const W = 1800, H = 1250, DPR = 2;
+
+  const cards = [
+    { x: 70,   y: 140, w: 480, h: 230, accent: '#0d9488', soft: '#f0fdfa', n: '1', title: 'Detectar',
+      lines: ['git status --short', 'Archivos marcados UU', 'Busca <<<<<<<'] },
+    { x: 1250, y: 140, w: 480, h: 230, accent: '#2563eb', soft: '#eff6ff', n: '2', title: 'Entender',
+      lines: ['¿Qué cambió cada lado?', 'git diff y las 3 versiones', 'No borres nada todavía'] },
+    { x: 70,   y: 780, w: 480, h: 230, accent: '#d97706', soft: '#fffbeb', n: '3', title: 'Resolver',
+      lines: ['Abre el archivo', 'Elige, combina o elimina', 'Quita los marcadores'] },
+    { x: 1250, y: 780, w: 480, h: 230, accent: '#e11d48', soft: '#fff1f2', n: '4', title: 'Verificar',
+      lines: ['git diff --check', 'Ejecuta las pruebas', 'git add y git commit'] },
+    { x: 660,  y: 900, w: 480, h: 200, accent: '#16a34a', soft: '#f0fdf4', n: '5', title: 'Prevenir',
+      lines: ['Ramas cortas · integrar seguido', 'Avisar antes de tocar lo mismo'] }
+  ];
+
+  const center = { x: 675, y: 465, w: 450, h: 270 };
+
+  function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+
+  function drawBackground() {
+    const g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, '#f8fafc');
+    g.addColorStop(.55, '#f4faf9');
+    g.addColorStop(1, '#fdf5f6');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    const blob1 = ctx.createRadialGradient(260, 120, 0, 260, 120, 620);
+    blob1.addColorStop(0, 'rgba(45,212,191,.16)');
+    blob1.addColorStop(1, 'rgba(45,212,191,0)');
+    ctx.fillStyle = blob1;
+    ctx.fillRect(0, 0, W, H);
+
+    const blob2 = ctx.createRadialGradient(1560, 1140, 0, 1560, 1140, 620);
+    blob2.addColorStop(0, 'rgba(251,113,133,.14)');
+    blob2.addColorStop(1, 'rgba(251,113,133,0)');
+    ctx.fillStyle = blob2;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = 'rgba(148,163,184,.20)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= W; x += 50) {
+      ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); ctx.stroke();
+    }
+    for (let y = 0; y <= H; y += 50) {
+      ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); ctx.stroke();
+    }
+  }
+
+  function drawLink(from, to, color) {
+    ctx.save();
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    const mx = (from.x + to.x) / 2;
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.bezierCurveTo(mx, from.y, mx, to.y, to.x, to.y);
+    ctx.stroke();
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(to.x, to.y, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawLinks() {
+    drawLink({ x: 700, y: 500 }, { x: 550, y: 370 }, '#0d9488');
+    drawLink({ x: 1100, y: 500 }, { x: 1250, y: 370 }, '#2563eb');
+    drawLink({ x: 700, y: 700 }, { x: 550, y: 780 }, '#d97706');
+    drawLink({ x: 1100, y: 700 }, { x: 1250, y: 780 }, '#e11d48');
+    drawLink({ x: 900, y: 735 }, { x: 900, y: 900 }, '#16a34a');
+  }
+
+  function wrapText(text, maxWidth) {
+    const words = text.split(' ');
+    const out = [];
+    let line = '';
+    for (const word of words) {
+      const probe = line ? line + ' ' + word : word;
+      if (ctx.measureText(probe).width > maxWidth && line) {
+        out.push(line);
+        line = word;
+      } else {
+        line = probe;
+      }
+    }
+    if (line) out.push(line);
+    return out;
+  }
+
+  function drawCard(c) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(15,23,42,.10)';
+    ctx.shadowBlur = 32;
+    ctx.shadowOffsetY = 14;
+    ctx.fillStyle = '#ffffff';
+    roundRect(ctx, c.x, c.y, c.w, c.h, 24);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 2;
+    roundRect(ctx, c.x, c.y, c.w, c.h, 24);
+    ctx.stroke();
+
+    ctx.save();
+    roundRect(ctx, c.x, c.y, c.w, c.h, 24);
+    ctx.clip();
+    ctx.fillStyle = c.accent;
+    ctx.fillRect(c.x, c.y, 9, c.h);
+    ctx.restore();
+
+    const badgeX = c.x + 54, badgeY = c.y + 55;
+    ctx.beginPath();
+    ctx.arc(badgeX, badgeY, 25, 0, Math.PI * 2);
+    ctx.fillStyle = c.soft;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = c.accent;
+    ctx.stroke();
+    ctx.fillStyle = c.accent;
+    ctx.font = '800 24px "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(c.n, badgeX, badgeY + 1);
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '800 30px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(c.title, c.x + 98, c.y + 64);
+
+    let ty = c.y + 108;
+    const maxWidth = c.w - 128;
+    c.lines.forEach((line, i) => {
+      ctx.fillStyle = i === 0 ? '#334155' : '#475569';
+      ctx.font = i === 0 ? '600 21px "Segoe UI", Arial, sans-serif' : '400 21px "Segoe UI", Arial, sans-serif';
+      wrapText(line, maxWidth).forEach(part => {
+        ctx.fillText(part, c.x + 98, ty);
+        ty += 29;
+      });
+    });
+  }
+
+  function drawCenter() {
+    ctx.save();
+    ctx.shadowColor = 'rgba(15,23,42,.30)';
+    ctx.shadowBlur = 50;
+    ctx.shadowOffsetY = 18;
+    const g = ctx.createLinearGradient(center.x, center.y, center.x + center.w, center.y + center.h);
+    g.addColorStop(0, '#0f172a');
+    g.addColorStop(1, '#152238');
+    ctx.fillStyle = g;
+    roundRect(ctx, center.x, center.y, center.w, center.h, 40);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 2;
+    roundRect(ctx, center.x, center.y, center.w, center.h, 40);
+    ctx.stroke();
+
+    const cx = center.x + center.w / 2;
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#5eead4';
+    ctx.font = '800 16px "Segoe UI", Arial, sans-serif';
+    ctx.save();
+    ctx.letterSpacing = '4px';
+    ctx.fillText('EL PROBLEMA', cx, center.y + 62);
+    ctx.restore();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 44px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('Conflicto', cx, center.y + 124);
+    ctx.fillText('en Git', cx, center.y + 172);
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '400 19px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('Git pausa. Tú decides.', cx, center.y + 214);
+  }
+
+  function drawFooter() {
+    const y = 1194;
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+    ctx.font = '700 20px "Segoe UI", Arial, sans-serif';
+    const strong = 'Regla de oro: ';
+    const rest = 'si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.';
+    const total = ctx.measureText(strong).width + ctx.measureText(rest).width;
+    let x = (W - total) / 2;
+    ctx.fillStyle = '#0f766e';
+    ctx.fillText(strong, x, y);
+    x += ctx.measureText(strong).width;
+    ctx.fillStyle = '#64748b';
+    ctx.font = '400 20px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(rest, x, y);
+  }
+
+  function draw() {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    drawBackground();
+    drawLinks();
+    cards.forEach(drawCard);
+    drawCenter();
+    drawFooter();
+    window.mapReady = true;
+  }
+
+  function downloadPng() {
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'mapa-mental-conflictos-git.png';
+    a.click();
+  }
+  window.downloadPng = downloadPng;
+
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+
+  const start = () => (document.fonts && document.fonts.ready ? document.fonts.ready.then(draw) : draw());
+  start();
+})();
+</script>
+</body>
+</html>

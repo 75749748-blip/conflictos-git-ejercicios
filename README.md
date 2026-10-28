@@ -18,7 +18,9 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 | Guía completa (PDF) | [Guia-Conflictos-Git.pdf](Guia-Conflictos-Git.pdf) |
 | Presentación animada (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
 | Presentación animada (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
-| Documentación con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
+| **Guía simple (PDF)** | **[documentacion/Conflictos-Git-Guia-Simple.pdf](documentacion/Conflictos-Git-Guia-Simple.pdf)** |
+| Mapa mental (Canvas HTML5) | [mapa-mental/mapa-mental.html](mapa-mental/mapa-mental.html) · [PNG](mapa-mental/mapa-mental.png) |
+| Documentación técnica con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
 | Capturas de las sesiones | [capturas/](capturas/) |
 | Scripts y logs | [ejercicios/](ejercicios/) |
 
@@ -71,10 +73,11 @@ bash 06-rebase.sh
 
 ## Evidencia
 
-- **23 capturas de terminal** en [`capturas/`](capturas/): conflicto, diagnóstico, resolución y validación de cada ejercicio.
-- Las capturas se generan a partir de los logs reales con `build/make-captures.js`; no son maquetas.
+- **10 capturas reales de consola** en [`build/real-captures/`](build/real-captures/): se tomaron de la ventana de comandos del equipo del autor después de ejecutar cada script. La guía simple usa solo estas capturas.
+- **23 capturas de terminal** en [`capturas/`](capturas/): versión ilustrada de la documentación técnica, generada desde los logs con `build/make-captures.js`.
 - Cada log contiene la salida de Git, los comandos ejecutados y el bloque `RESULTADO: N PASS, 0 FAIL`.
-- El PDF de documentación reúne las capturas, la explicación y la validación de los 10 ejercicios.
+- El **mapa mental** está dibujado con Canvas HTML5 en [`mapa-mental/mapa-mental.html`](mapa-mental/mapa-mental.html); el PNG se exporta a 3600 × 2500 px.
+- La guía simple reúne el mapa, el método de 4 pasos y una página por ejercicio con su captura real.
 
 ## Estructura
 
@@ -85,7 +88,15 @@ bash 06-rebase.sh
 ├── Conflictos-Git-Presentacion.pptx
 ├── Conflictos-Git-Presentacion.pdf
 ├── documentacion/
+│   ├── Conflictos-Git-Guia-Simple.pdf
 │   └── Documentacion-Ejercicios-Conflictos-Git.pdf
+├── mapa-mental/
+│   ├── mapa-mental.html
+│   └── mapa-mental.png
+├── build/real-captures/
+│   ├── 01.png … 10.png
+│   ├── run-01.cmd … run-10.cmd
+│   └── capture-all.ps1
 ├── capturas/
 │   ├── 01-conflicto-simple/
 │   ├── ...
@@ -101,6 +112,8 @@ bash 06-rebase.sh
     ├── make-pdf.js
     ├── make-captures.js
     ├── make-doc.js
+    ├── make-doc-simple.js
+    ├── make-canvas-map.js
     ├── make-ppt.js
     ├── animate-ppt.ps1
     ├── exercises-data.js

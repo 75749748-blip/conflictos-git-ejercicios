@@ -14,7 +14,7 @@ $ printf 'valor = 1\n' > config.txt
 $ git add config.txt
 
 $ git commit -m "base: valor 1"
-[main (root-commit) f1417e5] base: valor 1
+[main (root-commit) dc4eea6] base: valor 1
  1 file changed, 1 insertion(+)
  create mode 100644 config.txt
 
@@ -24,7 +24,7 @@ Switched to a new branch 'feature'
 $ printf 'valor = 2\n' > config.txt
 
 $ git commit -am "feature: valor 2"
-[feature 09fda2d] feature: valor 2
+[feature f7eac8f] feature: valor 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -33,7 +33,7 @@ Switched to branch 'main'
 $ printf 'valor = 3\n' > config.txt
 
 $ git commit -am "main: valor 3"
-[main d9589ca] main: valor 3
+[main 8ade703] main: valor 3
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git config merge.conflictStyle diff3
@@ -66,7 +66,7 @@ index 035cc36,3d2355f..0000000
 @@@ -1,1 -1,1 +1,7 @@@
 ++<<<<<<< HEAD
  +valor = 3
-++||||||| f1417e5
+++||||||| dc4eea6
 ++valor = 1
 ++=======
 + valor = 2
@@ -82,19 +82,19 @@ $ git show :3:config.txt
 valor = 2
 
 $ git log --merge --oneline -- config.txt
-d9589ca main: valor 3
-09fda2d feature: valor 2
+8ade703 main: valor 3
+f7eac8f feature: valor 2
 
 $ git diff --base -- config.txt
 * Unmerged path config.txt
 diff --git a/config.txt b/config.txt
-index b428fb3..1df67fa 100644
+index b428fb3..1d31c2b 100644
 --- a/config.txt
 +++ b/config.txt
 @@ -1 +1,7 @@
 +<<<<<<< HEAD
 +valor = 3
-+||||||| f1417e5
++||||||| dc4eea6
  valor = 1
 +=======
 +valor = 2
@@ -103,7 +103,7 @@ index b428fb3..1df67fa 100644
 $ cat config.txt
 <<<<<<< HEAD
 valor = 3
-||||||| f1417e5
+||||||| dc4eea6
 valor = 1
 =======
 valor = 2
@@ -146,7 +146,7 @@ valor = 5
 ### RESOLUCION ###
 
 $ git commit -m "merge: resuelve config.txt con mergetool"
-[main 4cea9cb] merge: resuelve config.txt con mergetool
+[main 865eb18] merge: resuelve config.txt con mergetool
 
 $ cat config.txt
 valor = 5
@@ -163,12 +163,12 @@ $ git show HEAD:config.txt
 valor = 5
 
 $ git log --oneline --graph --all --decorate
-*   4cea9cb (HEAD -> main) merge: resuelve config.txt con mergetool
+*   865eb18 (HEAD -> main) merge: resuelve config.txt con mergetool
 |\  
-| * 09fda2d (feature) feature: valor 2
-* | d9589ca main: valor 3
+| * f7eac8f (feature) feature: valor 2
+* | 8ade703 main: valor 3
 |/  
-* f1417e5 base: valor 1
+* dc4eea6 base: valor 1
   [PASS] el arbol de trabajo queda limpio
   [PASS] no quedan marcadores en el repositorio
   [PASS] el valor final es 5

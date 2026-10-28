@@ -14,7 +14,7 @@ $ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 $ git add app.txt
 
 $ git commit -m base
-[main (root-commit) 53a9e7f] base
+[main (root-commit) 0b67007] base
  1 file changed, 3 insertions(+)
  create mode 100644 app.txt
 
@@ -28,7 +28,7 @@ $ printf 'aportado por feature\n' > nueva.txt
 $ git add app.txt nueva.txt
 
 $ git commit -m "feature: linea 2 y nueva.txt"
-[feature a1a221a] feature: linea 2 y nueva.txt
+[feature 28e747d] feature: linea 2 y nueva.txt
  2 files changed, 2 insertions(+), 1 deletion(-)
  create mode 100644 nueva.txt
 
@@ -38,7 +38,7 @@ Switched to branch 'main'
 $ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
 
 $ git commit -am "main: linea 2"
-[main 619cb5d] main: linea 2
+[main e7b8832] main: linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git merge --no-edit -X ours feature
@@ -57,7 +57,7 @@ $ ls nueva.txt
 nueva.txt
 
 $ git show --stat --oneline HEAD
-be6bbd4 Merge branch 'feature'
+c12876d Merge branch 'feature'
 
  nueva.txt | 1 +
  1 file changed, 1 insertion(+)
@@ -65,7 +65,7 @@ be6bbd4 Merge branch 'feature'
   [PASS] -X ours conserva nueva.txt de feature
 
 $ git reset --hard HEAD~1
-HEAD is now at 619cb5d main: linea 2
+HEAD is now at e7b8832 main: linea 2
 
 $ git merge --no-edit -s ours feature
 Merge made by the 'ours' strategy.
@@ -79,7 +79,7 @@ $ if [ -e nueva.txt ]; then echo 'nueva.txt existe'; else echo 'nueva.txt NO exi
 nueva.txt NO existe
 
 $ git show --stat --oneline HEAD
-de56efe Merge branch 'feature'
+ddcfa5e Merge branch 'feature'
 
 
 $ git diff HEAD~1 HEAD --stat
@@ -105,7 +105,7 @@ $ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 $ git add app.txt
 
 $ git commit -m base
-[main (root-commit) 447b787] base
+[main (root-commit) 9eb3288] base
  1 file changed, 3 insertions(+)
  create mode 100644 app.txt
 
@@ -115,7 +115,7 @@ Switched to a new branch 'feature'
 $ printf 'linea 1\nlinea 2 (feature)\nlinea 3\n' > app.txt
 
 $ git commit -am "feature: linea 2"
-[feature 99a09c0] feature: linea 2
+[feature 3584a72] feature: linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -124,7 +124,7 @@ Switched to branch 'main'
 $ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
 
 $ git commit -am "main: linea 2"
-[main 3c01bdc] main: linea 2
+[main 78d6dd3] main: linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git merge feature
@@ -152,10 +152,10 @@ app.txt
 
 $ git commit -m "merge: resolucion registrada por rerere"
 Recorded resolution for 'app.txt'.
-[main 4895465] merge: resolucion registrada por rerere
+[main 1ca69be] merge: resolucion registrada por rerere
 
 $ git reset --hard HEAD~1
-HEAD is now at 3c01bdc main: linea 2
+HEAD is now at 78d6dd3 main: linea 2
 
 $ git merge feature
 Auto-merging app.txt
@@ -175,15 +175,15 @@ linea 3
 $ git add app.txt
 
 $ git commit -m "merge: rerere reutiliza la resolucion"
-[main d1452b5] merge: rerere reutiliza la resolucion
+[main 2d426df] merge: rerere reutiliza la resolucion
 
 $ git log --oneline --graph --all --decorate
-*   d1452b5 (HEAD -> main) merge: rerere reutiliza la resolucion
+*   2d426df (HEAD -> main) merge: rerere reutiliza la resolucion
 |\  
-| * 99a09c0 (feature) feature: linea 2
-* | 3c01bdc main: linea 2
+| * 3584a72 (feature) feature: linea 2
+* | 78d6dd3 main: linea 2
 |/  
-* 447b787 base
+* 9eb3288 base
   [PASS] el arbol de trabajo queda limpio
   [PASS] no quedan marcadores en el repositorio
   [PASS] rerere aplico la resolucion combinada
@@ -206,7 +206,7 @@ $ printf 'lock-a\n' > deps.lock
 $ git add .gitattributes deps.lock
 
 $ git commit -m "main: lockfile con merge=union"
-[main (root-commit) 3d2b0b8] main: lockfile con merge=union
+[main (root-commit) 623566b] main: lockfile con merge=union
  2 files changed, 2 insertions(+)
  create mode 100644 .gitattributes
  create mode 100644 deps.lock
@@ -217,7 +217,7 @@ Switched to a new branch 'feature-union'
 $ printf 'lock-b\n' > deps.lock
 
 $ git commit -am "feature: lock-b"
-[feature-union ce9b35b] feature: lock-b
+[feature-union 47c038c] feature: lock-b
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -226,7 +226,7 @@ Switched to branch 'main'
 $ printf 'lock-main\n' > deps.lock
 
 $ git commit -am "main: lock-main"
-[main c1ab437] main: lock-main
+[main dd4614e] main: lock-main
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git merge --no-edit feature-union
@@ -254,7 +254,7 @@ $ printf 'base\n' > config.ours
 $ git add .gitattributes config.ours
 
 $ git commit -m "main: driver ours"
-[main 221a983] main: driver ours
+[main 5eedd49] main: driver ours
  2 files changed, 2 insertions(+)
  create mode 100644 config.ours
 
@@ -264,7 +264,7 @@ Switched to a new branch 'feature-ours'
 $ printf 'feature\n' > config.ours
 
 $ git commit -am "feature: config.ours"
-[feature-ours 17ac589] feature: config.ours
+[feature-ours 59d49f8] feature: config.ours
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -273,7 +273,7 @@ Switched to branch 'main'
 $ printf 'main\n' > config.ours
 
 $ git commit -am "main: config.ours"
-[main 108525f] main: config.ours
+[main 82ff5f3] main: config.ours
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git merge --no-edit feature-ours
@@ -295,18 +295,18 @@ $ git status --short
 $ git diff --check
 
 $ git log --oneline --graph --all --decorate
-*   afe2a9d (HEAD -> main) Merge branch 'feature-ours'
+*   b56fee8 (HEAD -> main) Merge branch 'feature-ours'
 |\  
-| * 17ac589 (feature-ours) feature: config.ours
-* | 108525f main: config.ours
+| * 59d49f8 (feature-ours) feature: config.ours
+* | 82ff5f3 main: config.ours
 |/  
-* 221a983 main: driver ours
-*   0c44bfd Merge branch 'feature-union'
+* 5eedd49 main: driver ours
+*   f3f0b89 Merge branch 'feature-union'
 |\  
-| * ce9b35b (feature-union) feature: lock-b
-* | c1ab437 main: lock-main
+| * 47c038c (feature-union) feature: lock-b
+* | dd4614e main: lock-main
 |/  
-* 3d2b0b8 main: lockfile con merge=union
+* 623566b main: lockfile con merge=union
   [PASS] el arbol de trabajo queda limpio (drivers)
   [PASS] no quedan marcadores (drivers)
 

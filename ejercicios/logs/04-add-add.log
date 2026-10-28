@@ -16,7 +16,7 @@ $ printf 'node_modules/\n' > .gitignore
 $ git add .gitignore
 
 $ git commit -m "base: ignora node_modules"
-[main (root-commit) 0a04b63] base: ignora node_modules
+[main (root-commit) 002e279] base: ignora node_modules
  1 file changed, 1 insertion(+)
  create mode 100644 .gitignore
 
@@ -28,7 +28,7 @@ $ printf '# Changelog\n\n## 1.1.0\n- Login\n' > CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "feature: changelog 1.1.0"
-[feature 7ff802d] feature: changelog 1.1.0
+[feature 706544c] feature: changelog 1.1.0
  1 file changed, 4 insertions(+)
  create mode 100644 CHANGELOG.md
 
@@ -40,7 +40,7 @@ $ printf '# Changelog\n\n## 1.0.1\n- Dashboard\n' > CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "main: changelog 1.0.1"
-[main fb4f7ae] main: changelog 1.0.1
+[main ce791e4] main: changelog 1.0.1
  1 file changed, 4 insertions(+)
  create mode 100644 CHANGELOG.md
 
@@ -66,7 +66,7 @@ index e314405,5f55ad3..0000000
 ++<<<<<<< HEAD
  +## 1.0.1
  +- Dashboard
-++||||||| 0a04b63
+++||||||| 002e279
 ++=======
 + ## 1.1.0
 + - Login
@@ -78,7 +78,7 @@ $ cat CHANGELOG.md
 <<<<<<< HEAD
 ## 1.0.1
 - Dashboard
-||||||| 0a04b63
+||||||| 002e279
 =======
 ## 1.1.0
 - Login
@@ -104,7 +104,7 @@ $ cat CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "merge: unifica changelog con las entradas 1.1.0 y 1.0.1"
-[main a28d13e] merge: unifica changelog con las entradas 1.1.0 y 1.0.1
+[main 6ca4a98] merge: unifica changelog con las entradas 1.1.0 y 1.0.1
 
 ### VALIDACION ###
 

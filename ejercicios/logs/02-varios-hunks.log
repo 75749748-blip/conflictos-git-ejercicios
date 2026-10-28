@@ -16,7 +16,7 @@ $ printf '[app]\nnombre = demo\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = loc
 $ git add config.ini
 
 $ git commit -m "base: configuracion inicial"
-[main (root-commit) 70ec72a] base: configuracion inicial
+[main (root-commit) 1620301] base: configuracion inicial
  1 file changed, 12 insertions(+)
  create mode 100644 config.ini
 
@@ -26,7 +26,7 @@ Switched to a new branch 'feature'
 $ printf '[app]\nnombre = demo-feature\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = debug\nruta = logs/app.log\n' > config.ini
 
 $ git commit -am "feature: nombre y nivel debug"
-[feature ecee01b] feature: nombre y nivel debug
+[feature 2f2e103] feature: nombre y nivel debug
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 $ git switch main
@@ -35,7 +35,7 @@ Switched to branch 'main'
 $ printf '[app]\nnombre = demo-main\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = warn\nruta = logs/app.log\n' > config.ini
 
 $ git commit -am "main: nombre y nivel warn"
-[main dfb256b] main: nombre y nivel warn
+[main 40f4806] main: nombre y nivel warn
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 ### CONFLICTO ###
@@ -58,7 +58,7 @@ index e1eabd0,5443e3b..0000000
   [app]
 ++<<<<<<< HEAD
  +nombre = demo-main
-++||||||| 70ec72a
+++||||||| 1620301
 ++nombre = demo
 ++=======
 + nombre = demo-feature
@@ -72,7 +72,7 @@ index e1eabd0,5443e3b..0000000
   [log]
 ++<<<<<<< HEAD
  +nivel = warn
-++||||||| 70ec72a
+++||||||| 1620301
 ++nivel = info
 ++=======
 + nivel = debug
@@ -101,7 +101,7 @@ ruta = logs/app.log
 $ git add config.ini
 
 $ git commit -m "merge: combina nombre y elige nivel debug"
-[main 05ee82e] merge: combina nombre y elige nivel debug
+[main 42d3d59] merge: combina nombre y elige nivel debug
 
 ### VALIDACION ###
 

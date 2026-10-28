@@ -16,7 +16,7 @@ $ printf 'uno\ndos\ntres\n' > notas.txt
 $ git add notas.txt
 
 $ git commit -m "base: crea notas.txt"
-[main (root-commit) fc4c203] base: crea notas.txt
+[main (root-commit) b467fc7] base: crea notas.txt
  1 file changed, 3 insertions(+)
  create mode 100644 notas.txt
 
@@ -27,7 +27,7 @@ $ git rm notas.txt
 rm 'notas.txt'
 
 $ git commit -m "feature: elimina notas.txt"
-[feature 9a4a797] feature: elimina notas.txt
+[feature 5a72f06] feature: elimina notas.txt
  1 file changed, 3 deletions(-)
  delete mode 100644 notas.txt
 
@@ -37,7 +37,7 @@ Switched to branch 'main'
 $ printf 'uno\ndos (main)\ntres\n' > notas.txt
 
 $ git commit -am "main: edita notas.txt"
-[main 2e46dff] main: edita notas.txt
+[main 44507e8] main: edita notas.txt
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 ### CONFLICTO ###
@@ -68,15 +68,15 @@ dos (main)
 tres
 
 $ git log --merge --oneline -- notas.txt
-2e46dff main: edita notas.txt
-9a4a797 feature: elimina notas.txt
+44507e8 main: edita notas.txt
+5a72f06 feature: elimina notas.txt
 
 ### RESOLUCION A - CONSERVAR ###
 
 $ git add notas.txt
 
 $ git commit -m "merge: conserva notas.txt con la edicion de main"
-[main dcecb7a] merge: conserva notas.txt con la edicion de main
+[main 3250150] merge: conserva notas.txt con la edicion de main
 
 $ cat notas.txt
 uno
@@ -84,17 +84,17 @@ dos (main)
 tres
 
 $ git log --oneline --graph --all --decorate
-*   dcecb7a (HEAD -> main) merge: conserva notas.txt con la edicion de main
+*   3250150 (HEAD -> main) merge: conserva notas.txt con la edicion de main
 |\  
-| * 9a4a797 (feature) feature: elimina notas.txt
-* | 2e46dff main: edita notas.txt
+| * 5a72f06 (feature) feature: elimina notas.txt
+* | 44507e8 main: edita notas.txt
 |/  
-* fc4c203 base: crea notas.txt
+* b467fc7 base: crea notas.txt
 
 ### RESOLUCION B - ELIMINAR ###
 
 $ git reset --hard HEAD~1
-HEAD is now at 2e46dff main: edita notas.txt
+HEAD is now at 44507e8 main: edita notas.txt
 
 $ git merge feature
 CONFLICT (modify/delete): notas.txt deleted in feature and modified in HEAD.  Version HEAD of notas.txt left in tree.
@@ -108,7 +108,7 @@ $ git rm notas.txt
 rm 'notas.txt'
 
 $ git commit -m "merge: acepta la eliminacion de notas.txt"
-[main b2bd14e] merge: acepta la eliminacion de notas.txt
+[main 121cd45] merge: acepta la eliminacion de notas.txt
 
 $ git status --short
 
@@ -118,12 +118,12 @@ $ bash -c "if [ -f notas.txt ]; then echo "notas.txt existe"; else echo "notas.t
 notas.txt eliminado
 
 $ git log --oneline --graph --all --decorate
-*   b2bd14e (HEAD -> main) merge: acepta la eliminacion de notas.txt
+*   121cd45 (HEAD -> main) merge: acepta la eliminacion de notas.txt
 |\  
-| * 9a4a797 (feature) feature: elimina notas.txt
-* | 2e46dff main: edita notas.txt
+| * 5a72f06 (feature) feature: elimina notas.txt
+* | 44507e8 main: edita notas.txt
 |/  
-* fc4c203 base: crea notas.txt
+* b467fc7 base: crea notas.txt
 
 $ git diff --check
   [PASS] el arbol de trabajo queda limpio
