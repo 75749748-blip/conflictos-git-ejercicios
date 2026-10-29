@@ -121,7 +121,7 @@ function notes(s, str) { s.addNotes(str); }
   n++;
   const s = pptx.addSlide(); base(s, BLUE);
   kicker(s, '01 · El problema');
-  title(s, 'El conflicto no es un error', 'Es una decisión que Git no puede tomar por ti.');
+  title(s, 'El conflicto no es un error', 'Es una decisión que Git no puede tomar.');
   card(s, 0.65, 2.0, 3.85, 2.1, 'Dos historias', 'Dos ramas cambiaron el mismo archivo desde una base común.', TEAL, { name: 'c1' });
   card(s, 4.74, 2.0, 3.85, 2.1, 'Misma región', 'Los cambios se solapan y Git no sabe cuál conservar o cómo combinarlos.', BLUE, { name: 'c2' });
   card(s, 8.83, 2.0, 3.85, 2.1, 'Decisión humana', 'Una persona lee el contexto, elige el resultado y lo valida.', AMBER, { name: 'c3' });
@@ -144,17 +144,17 @@ function notes(s, str) { s.addNotes(str); }
   n++;
   const s = pptx.addSlide(); base(s, CORAL);
   kicker(s, '02 · Anatomía');
-  title(s, 'Leer los marcadores', 'El archivo te muestra las tres versiones. No borres a ciegas.');
+  title(s, 'Leer los marcadores', 'El archivo muestra las tres versiones. No conviene borrar a ciegas.');
   code(s, 0.65, 1.95, 7.3, 3.25, ['linea 1', '<<<<<<< HEAD', 'linea 2 (main)', '||||||| base', 'linea 2', '=======', 'linea 2 (feature)', '>>>>>>> feature', 'linea 3'], 11, 'diff3 / zdiff3', 'code');
   box(s, 0.65, 5.38, 7.3, 0.72, '0D2A33', AMBER, 0.08, 10);
   tx(s, 'diff3 añade la base; zdiff3 la colapsa cuando coincide.', 0.86, 5.55, 6.9, 0.3, 9.5, TXT);
-  [['<<<<<<< HEAD', 'ours: tu rama actual', TEAL], ['||||||| base', 'base común (diff3)', AMBER], ['=======', 'separador', '64748B'], ['>>>>>>> feature', 'theirs: la otra rama', CORAL]].forEach((r, i) => {
+  [['<<<<<<< HEAD', 'ours: rama actual', TEAL], ['||||||| base', 'base común (diff3)', AMBER], ['=======', 'separador', '64748B'], ['>>>>>>> feature', 'theirs: rama que se integra', CORAL]].forEach((r, i) => {
     const y = 2.0 + i * 0.92;
     box(s, 8.35, y, 4.3, 0.74, PANEL, r[2], 0.08);
     tx(s, r[0], 8.52, y + 0.12, 3.95, 0.24, 9, r[2], { fontFace: 'Consolas', bold: true });
     tx(s, r[1], 8.52, y + 0.38, 3.95, 0.2, 8.5, MUTED);
   });
-  tx(s, 'Con merge.conflictStyle=zdiff3 también ves la base, y entiendes qué cambió cada lado.', 0.65, 6.3, 7.3, 0.4, 10, MUTED, { italic: true });
+  tx(s, 'Con merge.conflictStyle=zdiff3 también se ve la base y queda claro qué cambió cada lado.', 0.65, 6.3, 7.3, 0.4, 10, MUTED, { italic: true });
   footer(s, 'Anatomía');
   notes(s, 'Recorrer el marcador de arriba a abajo. HEAD es ours; la etiqueta de la rama es theirs. La base solo aparece con diff3/zdiff3. Insistir: no se elige una línea sin entender las tres.');
 }
@@ -165,9 +165,9 @@ function notes(s, str) { s.addNotes(str); }
   const s = pptx.addSlide(); base(s, TEAL);
   kicker(s, '03 · Mapa mental');
   title(s, 'Del conflicto a la verificación', 'Seis nodos para no perder el hilo.');
-  box(s, 0.55, 1.8, 12.25, 5.0, '0A1220', LINE, 0.06);
-  imgFit(s, path.join(BUILD, 'mapa-mental.png'), 0.72, 1.95, 11.9, 4.65, 1800 / 966, 'map');
-  tx(s, 'Detectar → entender → resolver → marcar → confirmar → verificar', 0.65, 6.9, 11.2, 0.25, 9, MUTED, { italic: true });
+  box(s, 0.55, 2.05, 12.25, 4.75, '0A1220', LINE, 0.06);
+  imgFit(s, path.join(BUILD, 'mapa-mental.png'), 0.72, 2.1, 11.9, 4.45, 1800 / 966, 'map');
+  tx(s, 'Detectar → entender → resolver → marcar → confirmar → verificar', 0.65, 6.62, 11.2, 0.25, 9, MUTED, { italic: true });
   footer(s, 'Mapa mental');
   notes(s, 'Usar el mapa como columna vertebral de la presentación. Cada ejercicio vuelve a estos seis nodos; la diferencia está en el comando que dispara el conflicto.');
 }
@@ -177,7 +177,7 @@ function notes(s, str) { s.addNotes(str); }
   n++;
   const s = pptx.addSlide(); base(s, AMBER);
   kicker(s, '04 · Diagnóstico');
-  title(s, 'Los estados que debes reconocer', 'git status --short es tu primer diagnóstico.');
+  title(s, 'Los estados que deben reconocerse', 'git status --short es el primer diagnóstico.');
   [['UU', 'modificado por ambos', 'Contenido en conflicto', TEAL], ['AA', 'añadido por ambos', 'Dos archivos nuevos', BLUE], ['UD / DU', 'modificado / eliminado', 'Una rama borró el archivo', AMBER], ['DD', 'eliminado por ambos', 'Ambos lo borraron distinto', CORAL]].forEach((d, i) => {
     const x = 0.65 + (i % 2) * 6.2, y = 2.0 + Math.floor(i / 2) * 2.05;
     box(s, x, y, 5.95, 1.75, PANEL, d[3], 0.08);
@@ -236,12 +236,12 @@ function notes(s, str) { s.addNotes(str); }
   n++;
   const s = pptx.addSlide(); base(s, CORAL);
   kicker(s, '07 · La trampa');
-  title(s, 'Ours y theirs no son lo que parecen', 'En un merge, ours eres tú. En un rebase, ours es la base.');
-  card(s, 0.65, 2.0, 5.95, 2.2, 'MERGE', 'ours = tu rama actual (HEAD)\ntheirs = la rama que integras\n\n:2: = ours   ·   :3: = theirs', TEAL, { name: 'merge' });
-  card(s, 6.85, 2.0, 5.95, 2.2, 'REBASE', 'ours = la rama base (upstream)\ntheirs = tu commit que se reaplica\n\n:2: = base   ·   :3: = tu commit', CORAL, { name: 'rebase' });
+  title(s, 'Ours y theirs no son lo que parecen', 'En un merge, ours es la rama actual. En un rebase, ours es la base.');
+  card(s, 0.65, 2.0, 5.95, 2.2, 'MERGE', 'ours = rama actual (HEAD)\ntheirs = rama que se integra\n\n:2: = ours   ·   :3: = theirs', TEAL, { name: 'merge' });
+  card(s, 6.85, 2.0, 5.95, 2.2, 'REBASE', 'ours = rama base (upstream)\ntheirs = commit que se reaplica\n\n:2: = base   ·   :3: = commit reaplicado', CORAL, { name: 'rebase' });
   box(s, 0.65, 4.6, 12.15, 1.2, '2A1724', CORAL, 0.08);
   tx(s, 'Trampa frecuente', 0.9, 4.8, 2.2, 0.25, 11, CORAL, { bold: true });
-  tx(s, 'Si usas --ours en un rebase, conservas la base y puedes perder el cambio que estabas reaplicando. No es “mi versión”: es la versión de la base.', 2.95, 4.77, 9.55, 0.7, 10.5, TXT);
+  tx(s, 'Si se usa --ours en un rebase, se conserva la base y puede perderse el cambio que se estaba reaplicando. No es “mi versión”: es la versión de la base.', 2.95, 4.77, 9.55, 0.7, 10.5, TXT);
   code(s, 0.65, 6.0, 12.15, 0.75, ['git show :2:archivo   # ours   ·   git show :3:archivo   # theirs'], 9.5, 'La forma segura de comprobarlo', 'code');
   footer(s, 'La trampa');
   notes(s, 'Esta es la diapositiva que más importa. En merge, ours=mi rama; en rebase, ours=base. Por eso hay que mirar :2: y :3: y no fiarse de la etiqueta.');
@@ -297,7 +297,7 @@ function notes(s, str) { s.addNotes(str); }
   tx(s, 'BIN', 0.65, 2.75, 2.3, 0.55, 34, CORAL, { bold: true, align: 'center' });
   tx(s, 'logo.bin', 0.65, 3.35, 2.3, 0.25, 10, MUTED, { align: 'center', fontFace: 'Consolas' });
   code(s, 3.35, 1.98, 8.95, 3.4, ['$ git status --short', 'UU logo.bin', '', '$ git diff', 'warning: Cannot merge binary files', '', '$ git checkout --theirs -- logo.bin', '$ git add logo.bin', '$ git commit -m "merge: usa la version FEATURE"'], 9.5, 'La resolución posible', 'code');
-  tx(s, 'Si necesitas conservar las dos versiones, renombra una antes de integrar. Git no va a inventar una combinación.', 0.65, 5.7, 11.7, 0.5, 11, TXT);
+  tx(s, 'Si deben conservarse las dos versiones, se renombra una antes de integrar. Git no genera una combinación.', 0.65, 5.7, 11.7, 0.5, 11, TXT);
   chip(s, 0.65, 6.45, 1.15, '4 PASS', '34D399');
   footer(s, 'Práctica 5');
   notes(s, 'No perder tiempo intentando editar un binario como texto. Se elige ours o theirs; si se necesitan ambos, se renombra uno antes del merge. La validación comprueba el contenido final.');
@@ -308,11 +308,11 @@ function notes(s, str) { s.addNotes(str); }
   n++;
   const s = pptx.addSlide(); base(s, TEAL);
   kicker(s, '11 · Práctica 6');
-  title(s, 'Rebase: la historia se reescribe', 'Tu commit se reaplica sobre otra base. Si choca, se detiene.');
-  code(s, 0.65, 1.95, 7.3, 2.9, ['$ git switch feature', '$ git rebase main', 'CONFLICT (content): version.txt', '$ git show :2:version.txt   # base', '$ git show :3:version.txt   # tu commit', '$ git add version.txt', '$ GIT_EDITOR=true git rebase --continue'], 9.2, 'Secuencia', 'code');
+  title(s, 'Rebase: la historia se reescribe', 'El commit se reaplica sobre otra base. Si choca, la operación se detiene.');
+  code(s, 0.65, 1.95, 7.3, 2.9, ['$ git switch feature', '$ git rebase main', 'CONFLICT (content): version.txt', '$ git show :2:version.txt   # base', '$ git show :3:version.txt   # commit propio', '$ git add version.txt', '$ GIT_EDITOR=true git rebase --continue'], 9.2, 'Secuencia', 'code');
   box(s, 8.3, 1.95, 4.35, 2.9, '0D2A33', TEAL, 0.08);
   tx(s, 'OJO', 8.55, 2.15, 1.0, 0.3, 12, AMBER, { bold: true });
-  tx(s, 'En rebase, ours = base y theirs = tu commit. La etiqueta “ours” no significa “mi versión”.', 8.55, 2.6, 3.8, 1.1, 10.5, TXT);
+  tx(s, 'En rebase, ours = base y theirs = commit propio. La etiqueta «ours» no equivale a «versión propia».', 8.55, 2.6, 3.8, 1.1, 10.5, TXT);
   tx(s, 'ANTES', 0.8, 5.15, 0.8, 0.25, 9, '64748B', { bold: true });
   tx(s, 'DESPUÉS', 7.0, 5.15, 1.2, 0.25, 9, '64748B', { bold: true });
   s.addShape(P.line, { x: 1.6, y: 5.55, w: 4.0, h: 0, line: { color: TEAL, width: 1.5 } });
@@ -361,7 +361,7 @@ function notes(s, str) { s.addNotes(str); }
   code(s, 0.65, 3.75, 7.3, 2.3, ['$ git stash pop', 'CONFLICT (content): app.txt', 'Updated upstream / Stashed changes', '', '$ git add app.txt', '$ git stash drop', '$ git commit -m "feat: recupera el WIP"'], 9.4, 'La secuencia segura', 'code');
   box(s, 8.3, 3.75, 4.35, 2.3, '2A2312', AMBER, 0.08);
   tx(s, 'Recuerda', 8.55, 3.95, 1.3, 0.25, 11, AMBER, { bold: true });
-  tx(s, 'Si pop conflictúa, el stash NO se elimina. Primero resuelves, luego haces drop y commit.', 8.55, 4.35, 3.85, 1.0, 10.5, TXT);
+  tx(s, 'Si pop genera conflicto, el stash NO se elimina. Primero se resuelve; después, drop y commit.', 8.55, 4.35, 3.85, 1.0, 10.5, TXT);
   chip(s, 0.65, 6.5, 1.15, '4 PASS', '34D399');
   footer(s, 'Práctica 8');
   notes(s, 'El stash no es una copia de seguridad eterna. Si pop conflictúa, se conserva; hay que resolver, marcar y hacer drop explícitamente. Validar que la lista quede vacía.');
@@ -373,7 +373,7 @@ function notes(s, str) { s.addNotes(str); }
   const s = pptx.addSlide(); base(s, CORAL);
   kicker(s, '14 · Práctica 9');
   title(s, 'Inspección forense', 'Antes de editar, reconstruye las tres versiones.');
-  [[':1:', 'BASE', 'Lo que había antes', AMBER], [':2:', 'OURS', 'Tu rama actual', TEAL], [':3:', 'THEIRS', 'La otra rama', CORAL]].forEach((st, i) => {
+  [[':1:', 'BASE', 'Lo que había antes', AMBER], [':2:', 'OURS', 'Rama actual', TEAL], [':3:', 'THEIRS', 'Rama que se integra', CORAL]].forEach((st, i) => {
     const x = 0.65 + i * 2.55;
     box(s, x, 2.0, 2.3, 1.55, PANEL, st[3], 0.08);
     tx(s, st[0], x + 0.15, 2.15, 2.0, 0.4, 24, st[3], { bold: true, fontFace: 'Consolas' });
@@ -396,7 +396,7 @@ function notes(s, str) { s.addNotes(str); }
   const s = pptx.addSlide(); base(s, AMBER);
   kicker(s, '15 · Práctica 10');
   title(s, 'Estrategias automáticas', 'Atajos que reducen trabajo... y pueden ocultar decisiones.');
-  [['-X ours', 'Fusiona, pero en los hunks conflictivos conserva ours. Los cambios no conflictivos de la otra rama sí entran.', 'Riesgo: pierdes hunks de la otra rama sin aviso.', TEAL], ['-s ours', 'Crea un merge commit cuyo árbol es idéntico al de tu rama. Ignora todo el árbol de la otra.', 'Riesgo: descartas la otra rama por completo.', CORAL], ['merge=union', 'Concatena las líneas de ambos lados. Útil en listas; peligroso en JSON o código.', 'Riesgo: archivo sintácticamente inválido.', AMBER], ['merge=ours', 'Un driver que deja el archivo de ours. La otra versión se ignora sin conflicto.', 'Riesgo: cambios invisibles.', BLUE]].forEach((c, i) => {
+  [['-X ours', 'Fusiona, pero en los hunks conflictivos conserva ours. Los cambios no conflictivos de la otra rama sí entran.', 'Riesgo: se pierden hunks de la otra rama sin aviso.', TEAL], ['-s ours', 'Crea un merge commit cuyo árbol es idéntico al de la rama actual. Ignora todo el árbol de la otra.', 'Riesgo: se descarta la otra rama por completo.', CORAL], ['merge=union', 'Concatena las líneas de ambos lados. Útil en listas; peligroso en JSON o código.', 'Riesgo: archivo sintácticamente inválido.', AMBER], ['merge=ours', 'Un driver que deja el archivo de ours. La otra versión se ignora sin conflicto.', 'Riesgo: cambios invisibles.', BLUE]].forEach((c, i) => {
     const x = 0.65 + (i % 2) * 6.2, y = 1.98 + Math.floor(i / 2) * 2.1;
     box(s, x, y, 5.95, 1.8, PANEL, c[3], 0.07);
     tx(s, c[0], x + 0.2, y + 0.15, 5.4, 0.3, 14, c[3], { bold: true, fontFace: 'Consolas' });
@@ -415,7 +415,7 @@ function notes(s, str) { s.addNotes(str); }
   const s = pptx.addSlide(); base(s, TEAL);
   kicker(s, '16 · Práctica 10B y 10C');
   title(s, 'rerere y merge drivers', 'Recordar una resolución o delegar la fusión a una regla.');
-  card(s, 0.65, 1.98, 5.95, 3.9, 'rerere', 'Reuse Recorded Resolution.\n\n1. rerere.enabled true\n2. conflicto y resolución\n3. Git recuerda el conflicto\n4. repites el merge\n5. aplica la solución\n\nSolo funciona con conflictos idénticos.', TEAL, { name: 'rerere', bodySize: 10 });
+  card(s, 0.65, 1.98, 5.95, 3.9, 'rerere', 'Reuse Recorded Resolution.\n\n1. rerere.enabled true\n2. conflicto y resolución\n3. Git recuerda el conflicto\n4. se repite el merge\n5. aplica la solución\n\nSolo funciona con conflictos idénticos.', TEAL, { name: 'rerere', bodySize: 10 });
   card(s, 6.85, 1.98, 5.95, 3.9, 'merge drivers', '.gitattributes decide por ruta.\n\ndeps.lock merge=union\n*.ours    merge=ours\n\nunion concatena; ours conserva\nel archivo de nuestra rama.\n\nPotentes y silenciosos: documentar.', BLUE, { name: 'drivers', bodySize: 10 });
   code(s, 0.65, 6.0, 12.15, 0.72, ['git config rerere.enabled true   ·   git config merge.ours.driver true'], 9.0, 'Configuración mínima', 'code');
   footer(s, 'Práctica 10B y 10C');
@@ -428,9 +428,9 @@ function notes(s, str) { s.addNotes(str); }
   const s = pptx.addSlide(); base(s, TEAL);
   kicker(s, '17 · Mapa conceptual');
   title(s, 'Todo el sistema en una imagen', 'Del origen del conflicto a la decisión y la verificación.');
-  box(s, 0.55, 1.75, 12.25, 5.1, '0A1220', LINE, 0.06);
-  imgFit(s, path.join(BUILD, 'mapa-conceptual-compact.png'), 0.72, 2.0, 11.9, 4.2, 1800 / 497, 'map');
-  tx(s, 'Conflicto → diagnóstico → resolución → estrategia → validación', 0.65, 6.5, 11.4, 0.25, 9, MUTED, { italic: true });
+  box(s, 0.55, 2.03, 12.25, 4.5, '0A1220', LINE, 0.06);
+  imgFit(s, path.join(BUILD, 'mapa-conceptual-compact.png'), 0.72, 2.12, 11.9, 4.3, 1800 / 497, 'map');
+  tx(s, 'Conflicto → diagnóstico → resolución → estrategia → validación', 0.65, 6.6, 11.4, 0.25, 9, MUTED, { italic: true });
   footer(s, 'Mapa conceptual');
   notes(s, 'Cerrar la parte conceptual con el mapa. Los ejercicios son instancias de este sistema; la estrategia se elige después de diagnosticar, no antes.');
 }
@@ -453,7 +453,7 @@ function notes(s, str) { s.addNotes(str); }
   box(s, 0.65, 3.95, 12.0, 2.1, '0D2A33', TEAL, 0.08);
   tx(s, 'Repositorio público', 0.9, 4.15, 3.0, 0.3, 13, TEAL, { bold: true });
   tx(s, 'github.com/75749748-blip/conflictos-git-ejercicios', 0.9, 4.55, 7.2, 0.3, 11, '5EEAD4', { hyperlink: 'https://github.com/75749748-blip/conflictos-git-ejercicios' });
-  tx(s, 'Guía · PDF · PPT · 10 scripts · 10 logs · 23 capturas', 0.9, 5.0, 7.5, 0.25, 9.5, MUTED);
+  tx(s, 'Guía · PDF · PPT · 10 scripts · 10 logs · 51 capturas reales', 0.9, 5.0, 7.5, 0.25, 9.5, MUTED);
   tx(s, 'Cada log termina en RESULTADO: N PASS, 0 FAIL. Cada captura sale de ese log.', 0.9, 5.45, 10.8, 0.3, 10, MUTED, { italic: true });
   footer(s, 'Evidencia');
   notes(s, 'Mostrar el repositorio como evidencia reproducible. Los números no son una promesa: están en los logs y en las capturas. Cualquiera puede ejecutar run-all.sh y obtener el mismo resultado.');
@@ -480,7 +480,7 @@ function notes(s, str) { s.addNotes(str); }
   tx(s, 'FAIL', 4.48, 5.32, 0.8, 0.25, 9, MUTED);
   tx(s, 'Repositorio y evidencia:', 6.1, 4.85, 5.9, 0.25, 9, MUTED);
   tx(s, 'github.com/75749748-blip/conflictos-git-ejercicios', 6.1, 5.15, 6.0, 0.3, 10, '5EEAD4', { hyperlink: 'https://github.com/75749748-blip/conflictos-git-ejercicios' });
-  tx(s, 'Guía · PDF · PPT · 10 scripts · 10 logs · 23 capturas', 6.1, 5.55, 5.9, 0.25, 9, MUTED);
+  tx(s, 'Guía · PDF · PPT · 10 scripts · 10 logs · 51 capturas reales', 6.1, 5.55, 5.9, 0.25, 9, MUTED);
   tx(s, 'Gracias.', 0.65, 6.55, 3.0, 0.35, 16, TXT, { bold: true });
   footer(s, 'Cierre');
   notes(s, 'Terminar con la checklist y la evidencia. La idea que debe quedar: un conflicto se resuelve con método, no con memoria. El repositorio permite repetir cada práctica.');

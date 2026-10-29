@@ -37,17 +37,22 @@ function logInfo(exercise) {
   };
 }
 
-function shotFiles(exercise, shot) {
-  const dir = path.join(ROOT, 'capturas', exercise.slug);
+function shotFiles(exercise) {
+  // Capturas reales de la consola, una secuencia por ejercicio.
+  const dir = path.join(ROOT, 'build', 'real-captures', 'seq', exercise.n);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
-    .filter(f => f.endsWith('.png') && (f === `${shot.id}.png` || f.startsWith(`${shot.id}-`)))
+    .filter(f => /^\d+\.png$/.test(f))
     .sort()
-    .map(f => `capturas/${exercise.slug}/${f}`);
+    .map(f => `build/real-captures/seq/${exercise.n}/${f}`);
 }
 
 function repoPath(...parts) {
   return `${REPO_URL}/blob/main/${parts.join('/')}`;
+}
+
+function totalShots() {
+  return exercises.reduce((sum, e) => sum + shotFiles(e).length, 0);
 }
 
 function coverHtml() {
@@ -96,21 +101,21 @@ function coverHtml() {
     <div class="bar"></div><div class="g1"></div><div class="g2"></div><div class="grid"></div>
     <div class="right">10 / 10 verificados</div>
     <div class="content">
-      <div class="eyebrow">Documentación de prácticas · Git</div>
+      <div class="eyebrow">Anexo técnico · Evidencia de ejecución</div>
       <h1>Conflictos<br>de <em>código</em></h1>
       <p class="subtitle">10 ejercicios ejecutados, resueltos y <strong>documentados con capturas reales</strong></p>
       <p class="desc">Merge, rebase, cherry-pick, stash, binarios, inspección forense, mergetool y estrategias automáticas. Cada práctica incluye su script, su log y la evidencia de validación.</p>
-      <div class="meta"><span>57 PASS · 0 FAIL</span><span>23 capturas</span><span>Git 2.56.0</span><span>GitHub</span></div>
+      <div class="meta"><span>57 PASS · 0 FAIL</span><span>${totalShots()} capturas reales</span><span>Git 2.56.0</span><span>GitHub</span></div>
       <div class="terminal"><div class="tbar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="t">Git Bash — evidencia de ejecución</span></div><pre><span class="p">${esc(sample.split('\n').slice(0,2).join('\n'))}</span>\n${esc(sample.split('\n').slice(2,5).join('\n'))}\n<span class="p">${esc(sample.split('\n').slice(5,8).join('\n'))}</span>\n<span class="pass">${esc(sample.split('\n').slice(8).join('\n'))}</span></pre></div>
     </div>
-    <div class="foot"><span>Ivan · Octubre 2026 · Windows 11</span><a href="${esc(REPO_URL)}">${esc(REPO_URL.replace('https://',''))}</a></div>
+    <div class="foot"><span>Ivan &lt;75749748@iegb.edu.pe&gt; · Octubre 2026 · equipo IVAN</span><a href="${esc(REPO_URL)}">${esc(REPO_URL.replace('https://',''))}</a></div>
   </div></body></html>`;
 }
 
 function bodyHtml() {
   const totalPass = exercises.reduce((sum, e) => sum + logInfo(e).pass, 0);
   const totalFail = exercises.reduce((sum, e) => sum + logInfo(e).fail, 0);
-  const totalShots = exercises.reduce((sum, e) => sum + e.shots.reduce((n, s) => n + shotFiles(e, s).length, 0), 0);
+  const shotsTotal = totalShots();
 
   const indexRows = exercises.map(e => {
     const info = logInfo(e);
@@ -119,11 +124,15 @@ function bodyHtml() {
 
   const sections = exercises.map(e => {
     const info = logInfo(e);
-    const figures = e.shots.map((shot, shotIndex) => {
-      const files = shotFiles(e, shot);
-      if (!files.length) return '';
-      return files.map((file, i) => `<figure class="shot ${shotIndex === 0 && i === 0 ? 'first' : 'rest'}"><img src="${dataUri(file)}" alt="${esc(shot.label)}"><figcaption><strong>${esc(shot.label)}</strong>${files.length > 1 ? ` · captura ${i + 1} de ${files.length}` : ''} — salida real de <code>${esc(e.slug)}.log</code></figcaption></figure>`).join('');
-    }).join('');
+    const files = shotFiles(e);
+    const total = files.length;
+    const figures = files.length
+      ? (() => {
+          const k = files.length - 1;
+          const maxh = info.checks.length > 10 ? 62 : 86;
+          return `<figure class="shot first"><img style="max-height:${maxh}mm" src="${dataUri(files[k])}" alt="Captura ${k + 1} de ${total} del ejercicio ${e.n}: ${esc(e.title)}"><figcaption><strong>Captura ${k + 1} de ${total}</strong> — cierre de la sesión real, con las comprobaciones y el resultado final. La secuencia completa está en el repositorio.</figcaption></figure>`;
+        })()
+      : '';
     const checks = info.checks.map(c => `<li>${esc(c)}</li>`).join('');
     const failed = info.failed.length ? `<div class="failbox"><strong>Fallos registrados:</strong><ul>${info.failed.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>` : '';
     return `<section class="exercise">
@@ -131,7 +140,6 @@ function bodyHtml() {
       <h2>${esc(e.title)}</h2>
       <div class="meta"><span class="chip">${esc(e.difficulty)}</span><span class="chip">${info.pass} PASS · ${info.fail} FAIL</span><span class="chip">${info.checks.length} comprobaciones</span></div>
       <div class="objective"><strong>Objetivo.</strong> ${esc(e.objective)}</div>
-      <p class="short">${esc(e.short)}</p>
       <h3>Comandos clave</h3>
       <pre class="cmd"><code>${esc(e.commands.join('\n'))}</code></pre>
       ${figures}
@@ -139,7 +147,7 @@ function bodyHtml() {
       <div class="validation"><div class="vhead"><span class="check">✓</span> ${info.pass} comprobaciones PASS · ${info.fail} FAIL</div><ul>${checks}</ul></div>
       ${failed}
       <div class="lesson"><strong>Lección.</strong> ${esc(e.lesson)}</div>
-      <p class="links">Evidencia: <a href="${repoPath('ejercicios', `${e.slug}.sh`)}">script</a> · <a href="${repoPath('ejercicios', 'logs', `${e.slug}.log`)}">log completo</a> · <a href="${REPO_URL}/tree/main/capturas/${e.slug}">capturas</a></p>
+      <p class="links">Evidencia: <a href="${repoPath('ejercicios', `${e.slug}.sh`)}">script</a> · <a href="${repoPath('ejercicios', 'logs', `${e.slug}.log`)}">log completo</a> · <a href="${REPO_URL}/tree/main/build/real-captures/seq/${e.n}">capturas</a></p>
     </section>`;
   }).join('');
 
@@ -152,19 +160,20 @@ function bodyHtml() {
     .doc-head .k { font-size:8pt; letter-spacing:.2em; font-weight:700; color:#0f766e; text-transform:uppercase; }
     .doc-head .t { font-size:10.5pt; color:#0f172a; font-weight:600; min-width:0; overflow-wrap:anywhere; text-align:right; }
     h1,h2,h3,h4 { color:#0f172a; font-weight:700; line-height:1.2; page-break-after:avoid; }
-    h1 { font-size:22pt; margin:0 0 8pt; letter-spacing:-.01em; }
-    h2 { font-size:16pt; margin:0 0 7pt; padding-bottom:4pt; border-bottom:2px solid #ccfbf1; }
-    h3 { font-size:11.8pt; margin:14pt 0 5pt; color:#0f766e; }
-    p { margin:0 0 7pt; text-align:justify; }
+    h1 { font-size:20pt; margin:0 0 6pt; letter-spacing:-.01em; }
+    h2 { font-size:14pt; margin:0 0 5pt; padding-bottom:3pt; border-bottom:2px solid #ccfbf1; }
+    h3 { font-size:11pt; margin:9pt 0 3pt; color:#0f766e; }
+    p { margin:0 0 6pt; text-align:justify; }
     ul,ol { margin:0 0 8pt; padding-left:18pt; }
     li { margin-bottom:3pt; }
     code { font-family:Consolas,'Courier New',monospace; font-size:8.7pt; background:#f1f5f9; padding:1px 3px; border-radius:2px; color:#0f172a; overflow-wrap:anywhere; }
     pre { background:#0b1220; color:#e2e8f0; padding:9pt 11pt; border-radius:6pt; overflow:hidden; margin:8pt 0 10pt; page-break-inside:auto; max-width:100%; }
     pre code { background:transparent; color:inherit; padding:0; font-size:8.4pt; line-height:1.45; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; }
     .cmd { border-left:4pt solid #2dd4bf; }
-    table { width:100%; max-width:100%; table-layout:fixed; border-collapse:collapse; margin:6pt 0 8pt; font-size:8.2pt; }
-    th { background:#0f766e; color:#fff; text-align:left; padding:4pt 5pt; font-weight:600; overflow-wrap:anywhere; }
-    td { border-bottom:.5pt solid #e2e8f0; padding:3pt 5pt; vertical-align:top; overflow-wrap:anywhere; word-break:break-word; }
+    pre code { font-size:8pt; line-height:1.4; }
+    table { width:100%; max-width:100%; table-layout:fixed; border-collapse:collapse; margin:5pt 0 6pt; font-size:7.7pt; }
+    th { background:#0f766e; color:#fff; text-align:left; padding:3.2pt 5pt; font-weight:600; overflow-wrap:anywhere; }
+    td { border-bottom:.5pt solid #e2e8f0; padding:2.2pt 5pt; vertical-align:top; overflow-wrap:anywhere; word-break:break-word; }
     tr:nth-child(even) td { background:#f8fafc; }
     tr { page-break-inside:avoid; }
     .ok { color:#047857; font-weight:700; white-space:nowrap; }
@@ -172,28 +181,32 @@ function bodyHtml() {
     .kicker { font-size:8pt; letter-spacing:.18em; text-transform:uppercase; color:#0f766e; font-weight:700; margin-bottom:3pt; }
     .meta { display:flex; gap:6pt; flex-wrap:wrap; margin:7pt 0 9pt; }
     .chip { font-size:8.2pt; color:#0f766e; background:#f0fdfa; border:1px solid #99f6e4; border-radius:20px; padding:2pt 7pt; }
-    .objective { background:#f0fdfa; border-left:4pt solid #2dd4bf; padding:8pt 10pt; margin:8pt 0; color:#134e4a; page-break-inside:avoid; }
+    .objective { background:#f0fdfa; border-left:4pt solid #2dd4bf; padding:6pt 9pt; margin:6pt 0; color:#134e4a; page-break-inside:avoid; }
     .short { color:#475569; font-style:italic; }
-    figure.shot { margin:10pt 0 14pt; text-align:center; page-break-inside:avoid; }
-    figure.shot img { display:block; margin:0 auto; width:auto; max-width:100%; max-height:230mm; height:auto; border:1px solid #1e293b; border-radius:6pt; background:#0b1220; padding:2pt; }
-    figure.shot.first img { max-height:140mm; }
+    figure.shot { margin:6pt 0 8pt; text-align:center; page-break-inside:avoid; }
+    figure.shot img { display:block; margin:0 auto; width:auto; max-width:100%; max-height:190mm; height:auto; border:1px solid #1e293b; border-radius:6pt; background:#0b1220; padding:2pt; }
+    figure.shot.first img { max-height:86mm; }
+    .shots { display:grid; grid-template-columns:1fr 1fr; gap:7pt 6pt; margin:0 0 12pt; }
+    .shots figure.shot { margin:0; }
+    .shots figure.shot img { width:100%; max-height:none; }
     figcaption { font-size:8.2pt; color:#64748b; margin-top:4pt; line-height:1.4; text-align:left; }
+    figure.shot strong { color:#0f766e; }
     figcaption code { font-size:7.6pt; }
-    .validation { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6pt; padding:8pt 10pt; margin:7pt 0 9pt; page-break-inside:avoid; }
+    .validation { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6pt; padding:6pt 9pt; margin:6pt 0 7pt; page-break-inside:avoid; }
     .vhead { font-weight:700; color:#166534; margin-bottom:4pt; }
     .vhead .check { display:inline-block; background:#22c55e; color:#fff; border-radius:50%; width:14pt; height:14pt; text-align:center; line-height:14pt; font-size:9pt; margin-right:4pt; }
-    .validation ul { margin:0; padding-left:16pt; }
-    .validation li { color:#166534; }
-    .lesson { background:#fffbeb; border-left:4pt solid #f59e0b; padding:8pt 10pt; margin:8pt 0; color:#78350f; page-break-inside:avoid; }
-    .links { font-size:8.6pt; color:#64748b; }
+    .validation ul { margin:0; padding-left:15pt; columns:2; column-gap:16pt; }
+    .validation li { color:#166534; break-inside:avoid; }
+    .lesson { background:#fffbeb; border-left:4pt solid #f59e0b; padding:6pt 9pt; margin:6pt 0; color:#78350f; page-break-inside:avoid; }
+    .links { font-size:8.2pt; color:#64748b; margin:0 0 4pt; }
     .links a { color:#0f766e; text-decoration:none; }
-    .stats { display:flex; gap:8pt; margin:12pt 0; }
-    .stat { flex:1; background:#0f172a; color:#fff; border-radius:8pt; padding:10pt; text-align:center; }
-    .stat .n { font-size:24pt; font-weight:800; color:#2dd4bf; line-height:1; }
-    .stat .l { font-size:8pt; color:#cbd5e1; margin-top:3pt; }
-    .callout { background:#f8fafc; border:1px solid #e2e8f0; border-radius:6pt; padding:9pt 11pt; margin:9pt 0; page-break-inside:avoid; }
+    .stats { display:flex; gap:7pt; margin:9pt 0; }
+    .stat { flex:1; background:#0f172a; color:#fff; border-radius:8pt; padding:7pt; text-align:center; }
+    .stat .n { font-size:20pt; font-weight:800; color:#2dd4bf; line-height:1; }
+    .stat .l { font-size:7.6pt; color:#cbd5e1; margin-top:2pt; }
+    .callout { background:#f8fafc; border:1px solid #e2e8f0; border-radius:6pt; padding:7pt 9pt; margin:7pt 0; page-break-inside:avoid; }
     .callout strong { color:#0f766e; }
-    .repo { background:#0b1220; color:#e2e8f0; border-radius:8pt; padding:10pt 12pt; margin:10pt 0; word-break:break-all; }
+    .repo { background:#0b1220; color:#e2e8f0; border-radius:8pt; padding:8pt 10pt; margin:8pt 0; word-break:break-all; }
     .repo a { color:#5eead4; text-decoration:none; }
     .github { border:1px solid #1e293b; border-radius:8pt; overflow:hidden; margin:10pt 0; page-break-inside:avoid; }
     .github img { width:100%; display:block; }
@@ -202,10 +215,10 @@ function bodyHtml() {
     a { color:#0f766e; text-decoration:none; }
     h1 + p, h2 + p, h3 + p { margin-top:0; }
   </style></head><body>
-    <div class="doc-head"><span class="k">Documentación de prácticas</span><span class="t">Conflictos de código en Git</span></div>
+    <div class="doc-head"><span class="k">Anexo técnico · evidencia</span><span class="t">Conflictos de código en Git</span></div>
     <h1>10 ejercicios verificados</h1>
-    <p>Este documento reúne la ejecución real de los diez ejercicios de la guía de conflictos de Git. Cada práctica se ejecutó en un repositorio temporal, se resolvió y se validó con comprobaciones automáticas. Las capturas que aparecen a continuación provienen de los logs de esa ejecución, no son recreaciones.</p>
-    <div class="stats"><div class="stat"><div class="n">10/10</div><div class="l">ejercicios ejecutados</div></div><div class="stat"><div class="n">${totalPass}</div><div class="l">comprobaciones PASS</div></div><div class="stat"><div class="n">${totalFail}</div><div class="l">fallos</div></div><div class="stat"><div class="n">${totalShots}</div><div class="l">capturas de sesión</div></div></div>
+    <p>Este anexo reúne la ejecución de los diez ejercicios de detección y resolución de conflictos. Cada práctica se ejecutó en un repositorio temporal, se resolvió y se validó con comprobaciones automáticas. Las capturas se tomaron de la ventana de comandos de este equipo durante la ejecución; no son recreaciones ni se reconstruyeron desde los logs.</p>
+    <div class="stats"><div class="stat"><div class="n">10/10</div><div class="l">ejercicios ejecutados</div></div><div class="stat"><div class="n">${totalPass}</div><div class="l">comprobaciones PASS</div></div><div class="stat"><div class="n">${totalFail}</div><div class="l">fallos</div></div><div class="stat"><div class="n">${shotsTotal}</div><div class="l">capturas reales</div></div></div>
     <div class="repo"><strong>Repositorio público:</strong><br><a href="${esc(REPO_URL)}">${esc(REPO_URL)}</a><br><span class="small" style="color:#94a3b8">Commit inicial: <code style="color:#5eead4;background:transparent">df0706c</code> · Rama <code style="color:#5eead4;background:transparent">main</code></span></div>
     <div class="callout"><strong>Entorno de prueba.</strong> Windows 11 · Git 2.56.0.windows.1 · Git Bash · GitHub CLI 2.102.0 · Chrome headless para generar las capturas. Cada script configura un usuario local de práctica y no modifica la configuración global del equipo.</div>
     <h2>Cómo se verificó</h2>
@@ -213,7 +226,7 @@ function bodyHtml() {
       <li>Los diez scripts se ejecutan con <code>bash ejercicios/run-all.sh</code>; cada uno crea su repositorio temporal en <code>.work/</code>.</li>
       <li>Cada script genera el conflicto real, aplica la resolución y ejecuta comprobaciones con <code>[PASS]</code>/<code>[FAIL]</code>.</li>
       <li>El resultado se guarda en <code>ejercicios/logs/</code> y se resume en la última línea: <code>RESULTADO: N PASS, 0 FAIL</code>.</li>
-      <li>Las capturas se generan desde esos logs con <code>build/make-captures.js</code>; el texto y las salidas son los de la sesión real.</li>
+      <li>Las capturas se tomaron de la ventana de comandos mientras se ejecutaba cada script; el detalle del procedimiento está en <code>build/real-captures/README.md</code>.</li>
     </ul>
     <h2>Resultados</h2>
     <table><thead><tr><th style="width:8%">#</th><th style="width:36%">Ejercicio</th><th style="width:17%">Operación</th><th style="width:18%">Resultado</th><th style="width:21%">Evidencia</th></tr></thead><tbody>${indexRows}</tbody></table>
@@ -224,8 +237,8 @@ function bodyHtml() {
       <p>Los scripts, logs, capturas, la guía y la presentación están publicados en el repositorio. La siguiente captura corresponde a la página pública después de publicar la guía, la presentación y la documentación.</p>
       <div class="github"><img src="${dataUri('capturas/github-repo.png')}" alt="Repositorio conflictos-git-ejercicios en GitHub"></div>
       <div class="repo"><strong>URL:</strong> <a href="${esc(REPO_URL)}">${esc(REPO_URL)}</a><br><strong>Commit inicial:</strong> df0706c · <strong>Rama:</strong> main · <strong>Visibilidad:</strong> pública</div>
-      <div class="callout"><strong>Declaración de verificación.</strong> Los diez ejercicios fueron ejecutados en este equipo con Git 2.56.0.windows.1. Los logs muestran ${totalPass} comprobaciones PASS y ${totalFail} FAIL. Las capturas se obtuvieron de esos logs. El repositorio de GitHub contiene el código y la evidencia para que cualquier persona pueda repetir el proceso.</div>
-      <p class="small">Documento generado el 26 de octubre de 2026. Autor: Ivan. Guía base: <em>Detección y resolución de conflictos de código</em>.</p>
+      <div class="callout"><strong>Declaración de verificación.</strong> Los diez ejercicios fueron ejecutados en este equipo con Git 2.56.0.windows.1. Los logs muestran ${totalPass} comprobaciones PASS y ${totalFail} FAIL. Las capturas se tomaron de la consola durante la ejecución. El repositorio de GitHub contiene el código y la evidencia para que cualquier persona pueda repetir el proceso.</div>
+      <p class="small">Documento generado el 28 de octubre de 2026. Autor: Ivan. Caso de estudio: <em>Detección y resolución de conflictos de código</em>.</p>
     </section>
   </body></html>`;
 }

@@ -19,6 +19,8 @@ function dataUri(rel) {
 }
 
 const MAP = dataUri('mapa-mental/mapa-mental.png');
+const { grupos } = require('./comandos');
+const TOTAL_CMDS = grupos.reduce((s, g) => s + g.items.length, 0);
 
 // Cada ejercicio tiene una secuencia de capturas reales: la consola se
 // fotografía cada ~36 filas, así que entre todas las imágenes aparecen todos
@@ -41,119 +43,119 @@ const exercises = [
   {
     n: '01', difficulty: 'Básica', op: 'merge', pass: 5,
     title: 'Conflicto simple en una línea',
-    what: 'Las dos ramas cambiaron la misma línea de <code>app.txt</code>. Git no sabe cuál elegir y deja las dos versiones dentro del archivo, entre las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> y <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>.',
+    what: 'Las dos ramas modificaron la misma línea de <code>app.txt</code>. Git no puede decidir cuál conservar y deja ambas versiones dentro del archivo, entre las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> y <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>.',
     steps: [
-      { code: 'git status --short', text: 'El archivo aparece como <b>UU</b>: lo modificaron los dos lados.' },
-      { code: 'app.txt', text: 'Abre el archivo y conserva las dos líneas: <b>linea 2 (main)</b> y <b>linea 2 (feature)</b>.' },
-      { code: 'git add + git commit', text: 'Borra las marcas, guarda y confirma el merge.' }
+      { code: 'git status --short', text: 'El archivo se presenta con el estado <b>UU</b>: ambos lados lo modificaron.' },
+      { code: 'app.txt', text: 'Se conservan las dos líneas, <b>linea 2 (main)</b> y <b>linea 2 (feature)</b>, y se eliminan las marcas.' },
+      { code: 'git add + git commit', text: 'Se marca el archivo como resuelto y se confirma el merge.' }
     ],
-    result: 'Árbol limpio. app.txt conserva los dos cambios y no quedan marcadores.'
+    result: 'Árbol de trabajo limpio. app.txt conserva los dos cambios y no quedan marcadores.'
   },
   {
     n: '02', difficulty: 'Intermedia', op: 'merge', pass: 6,
     title: 'Varios conflictos en un archivo',
-    what: 'El mismo <code>config.ini</code> tiene dos zonas en conflicto: el nombre de la aplicación y el nivel de log. Cada zona se decide por separado; no conviene aplicar una sola respuesta a todo el archivo.',
+    what: 'El mismo <code>config.ini</code> presenta dos zonas en conflicto: el nombre de la aplicación y el nivel de log. Cada zona admite una decisión independiente; no conviene aplicar una sola respuesta a todo el archivo.',
     steps: [
-      { code: 'git diff', text: 'Localiza los dos bloques de conflicto y lee qué cambió cada lado.' },
-      { code: 'config.ini', text: 'Combina el nombre como <b>demo (main+feature)</b> y elige <b>debug</b> para el log.' },
-      { code: 'git add + git commit', text: 'Quita las marcas, guarda y confirma.' }
+      { code: 'git diff', text: 'Se localizan los dos bloques de conflicto y se identifica el cambio de cada lado.' },
+      { code: 'config.ini', text: 'El nombre se unifica como <b>demo (main+feature)</b> y el nivel de log se fija en <b>debug</b>.' },
+      { code: 'git add + git commit', text: 'Se eliminan las marcas y se confirma el merge.' }
     ],
-    result: 'Árbol limpio. Las dos zonas quedaron resueltas con decisiones independientes.'
+    result: 'Árbol de trabajo limpio. Las dos zonas quedaron resueltas con decisiones independientes.'
   },
   {
     n: '03', difficulty: 'Intermedia', op: 'merge', pass: 4,
     title: 'Conflicto modificar / eliminar',
-    what: 'Una rama editó <code>notas.txt</code> y la otra lo eliminó. Git pregunta, en la práctica, si el archivo debe seguir existiendo. Es el estado <b>UD</b> y la decisión es de producto, no de sintaxis.',
+    what: 'Una rama editó <code>notas.txt</code> y la otra lo eliminó. El caso equivale a decidir si el archivo debe seguir existiendo. Es el estado <b>UD</b> y la decisión es de producto, no de sintaxis.',
     steps: [
-      { code: 'git status + cat', text: 'Comprueba el estado y lee el contenido que quiso conservar una de las ramas.' },
-      { code: 'git add  ·  git rm', text: 'Elige: conservar el archivo con <b>add</b> o aceptar la eliminación con <b>rm</b>.' },
-      { code: 'git commit', text: 'Confirma el merge con la decisión tomada.' }
+      { code: 'git status + cat', text: 'Se comprueba el estado y se lee el contenido que una de las ramas quiso conservar.' },
+      { code: 'git add  ·  git rm', text: 'La decisión se registra con <b>add</b>, si se conserva el archivo, o con <b>rm</b>, si se acepta la eliminación.' },
+      { code: 'git commit', text: 'Se confirma el merge con la decisión adoptada.' }
     ],
-    result: 'Árbol limpio. Se documentó la solución de eliminar notas.txt.'
+    result: 'Árbol de trabajo limpio. Se documentó la solución de eliminar notas.txt.'
   },
   {
     n: '04', difficulty: 'Intermedia', op: 'merge', pass: 5,
     title: 'Conflicto añadir / añadir',
     what: 'Dos ramas crearon el mismo archivo nuevo, <code>CHANGELOG.md</code>, con contenidos distintos. Es el estado <b>AA</b>: no existe una versión base del archivo que sirva de referencia.',
     steps: [
-      { code: 'cat CHANGELOG.md', text: 'Git pegó los dos documentos completos. Léelos antes de tocar nada.' },
-      { code: 'CHANGELOG.md', text: 'Ordena las entradas <b>1.1.0</b> y <b>1.0.1</b> en un único changelog.' },
-      { code: 'git add + git commit', text: 'Guarda el archivo unificado y confirma.' }
+      { code: 'cat CHANGELOG.md', text: 'Git concatena los dos documentos. Ambos se leen antes de editar.' },
+      { code: 'CHANGELOG.md', text: 'Las entradas <b>1.1.0</b> y <b>1.0.1</b> se ordenan en un único changelog.' },
+      { code: 'git add + git commit', text: 'Se guarda el archivo unificado y se confirma.' }
     ],
-    result: 'Árbol limpio. Un solo CHANGELOG con las dos entradas.'
+    result: 'Árbol de trabajo limpio. Un solo CHANGELOG con las dos entradas.'
   },
   {
     n: '05', difficulty: 'Intermedia', op: 'merge', pass: 4,
     title: 'Conflicto con un archivo binario',
-    what: '<code>logo.bin</code> es binario. Git no puede comparar su contenido ni mostrar marcas: solo puede quedarse con una versión completa. Para conservar las dos, habría que renombrar una antes de integrar.',
+    what: '<code>logo.bin</code> es un archivo binario. Git no puede comparar su contenido ni mostrar marcas: solo puede conservar una versión completa. Para mantener las dos, una de ellas tendría que renombrarse antes de integrar.',
     steps: [
-      { code: 'git diff', text: 'Aparece el aviso <b>Cannot merge binary files</b>. No hay texto que editar.' },
-      { code: 'git checkout --theirs', text: 'Elige una versión completa del archivo (aquí, la de <b>feature</b>).' },
-      { code: 'git add + git commit', text: 'Marca la versión elegida y confirma el merge.' }
+      { code: 'git diff', text: 'Git muestra el aviso <b>Cannot merge binary files</b>; no hay texto que editar.' },
+      { code: 'git checkout --theirs', text: 'Se selecciona una versión completa del archivo (en este caso, la de <b>feature</b>).' },
+      { code: 'git add + git commit', text: 'Se marca la versión elegida y se confirma el merge.' }
     ],
-    result: 'Árbol limpio. logo.bin quedó con la versión de feature.'
+    result: 'Árbol de trabajo limpio. logo.bin conserva la versión de feature.'
   },
   {
     n: '06', difficulty: 'Avanzada', op: 'rebase', pass: 5,
     title: 'Conflicto durante un rebase',
-    what: 'En un rebase, Git reaplica tus commits sobre otra base. Si chocan, <b>ours</b> es la rama base y <b>theirs</b> es tu commit: justo al revés que en un merge.',
+    what: 'En un rebase, Git reaplica los commits sobre otra base. Si el parche no encaja, <b>ours</b> es la rama base y <b>theirs</b> es el commit propio: al revés que en un merge.',
     steps: [
-      { code: 'git status', text: 'Comprueba qué archivo detuvo el rebase.' },
-      { code: 'git show :2: :3:', text: 'Compara la base (main) con tu commit (feature) y resuelve el archivo.' },
-      { code: 'git add + git rebase --continue', text: 'Marca la resolución y continúa el rebase.' }
+      { code: 'git status', text: 'Se identifica el archivo que detuvo el rebase.' },
+      { code: 'git show :2: :3:', text: 'Se comparan la base (main) y el commit (feature) y se resuelve el archivo.' },
+      { code: 'git add + git rebase --continue', text: 'Se marca la resolución y se reanuda el rebase.' }
     ],
-    result: 'Historia lineal. No hay merge commit y los cambios se conservan.'
+    result: 'Historia lineal, sin commit de merge, con los cambios conservados.'
   },
   {
     n: '07', difficulty: 'Avanzada', op: 'cherry-pick', pass: 5,
     title: 'Conflicto en un cherry-pick',
-    what: 'Cherry-pick copia un commit concreto de <code>main</code> sobre <code>feature</code>. El parche ya no encaja en la nueva base y Git pausa para que lo ajustes.',
+    what: 'Cherry-pick copia un commit concreto de <code>main</code> sobre <code>feature</code>. El parche ya no encaja en la nueva base y Git se detiene para que se ajuste.',
     steps: [
-      { code: 'git log --oneline', text: 'Identifica el commit de main que quieres aplicar.' },
-      { code: 'git cherry-pick <hash>', text: 'Aplícalo sobre feature y observa el conflicto.' },
-      { code: 'git add + --continue', text: 'Resuelve app.txt, márcalo y continúa el cherry-pick.' }
+      { code: 'git log --oneline', text: 'Se identifica el commit de main que se va a aplicar.' },
+      { code: 'git cherry-pick <hash>', text: 'El commit se aplica sobre feature y se registra el conflicto.' },
+      { code: 'git add + --continue', text: 'Se resuelve app.txt, se marca y se reanuda el cherry-pick.' }
     ],
-    result: 'Árbol limpio. El cambio se aplicó una sola vez, sin duplicarlo.'
+    result: 'Árbol de trabajo limpio. El cambio se aplicó una sola vez, sin duplicarlo.'
   },
   {
     n: '08', difficulty: 'Intermedia', op: 'stash pop', pass: 4,
     title: 'Conflicto al recuperar un stash',
-    what: 'Guardaste trabajo a medias con <code>stash</code>, la rama principal avanzó y al recuperarlo choca con el commit nuevo. Verás <b>Updated upstream</b> y <b>Stashed changes</b>.',
+    what: 'El trabajo a medias se guardó con <code>stash</code>, la rama principal avanzó y, al recuperarlo, entra en conflicto con el commit nuevo. Las marcas muestran <b>Updated upstream</b> y <b>Stashed changes</b>.',
     steps: [
-      { code: 'git stash pop', text: 'Recupera el trabajo guardado y observa el conflicto.' },
-      { code: 'app.txt', text: 'Combina tu WIP con el cambio de main y elimina las marcas.' },
-      { code: 'git add + stash drop', text: 'Marca la resolución, elimina el stash ya aplicado y confirma.' }
+      { code: 'git stash pop', text: 'Se recupera el trabajo guardado y se registra el conflicto.' },
+      { code: 'app.txt', text: 'El WIP se combina con el cambio de main y se eliminan las marcas.' },
+      { code: 'git add + stash drop', text: 'Se marca la resolución, se descarta el stash ya aplicado y se confirma.' }
     ],
-    result: 'Árbol limpio. El WIP se recuperó y el stash quedó vacío.'
+    result: 'Árbol de trabajo limpio. El WIP se recuperó y la lista de stash quedó vacía.'
   },
   {
     n: '09', difficulty: 'Intermedia', op: 'mergetool', pass: 4,
     title: 'Inspección y herramienta de merge',
-    what: 'Antes de editar conviene reconstruir tres versiones: la base (<code>:1:</code>), tu lado (<code>:2:</code>) y el otro (<code>:3:</code>). Con esa información, una mergetool permite elegir el resultado sin adivinar.',
+    what: 'Antes de editar conviene reconstruir las tres versiones: la base (<code>:1:</code>), la versión local (<code>:2:</code>) y la remota (<code>:3:</code>). Con esa información, la herramienta de merge permite elegir el resultado sin adivinar.',
     steps: [
-      { code: 'git show :1: :2: :3:', text: 'Lee la base, tu versión y la del otro lado.' },
-      { code: 'git mergetool', text: 'Abre la herramienta y construye el resultado final de config.txt.' },
-      { code: 'git add + git commit', text: 'Guarda, marca y confirma el merge.' }
+      { code: 'git show :1: :2: :3:', text: 'Se leen la base, la versión local y la versión remota.' },
+      { code: 'git mergetool', text: 'La herramienta de merge construye el resultado final de config.txt.' },
+      { code: 'git add + git commit', text: 'Se guarda, se marca y se confirma el merge.' }
     ],
-    result: 'Árbol limpio. config.txt se resolvió con información completa.'
+    result: 'Árbol de trabajo limpio. config.txt se resolvió con información completa.'
   },
   {
     n: '10', difficulty: 'Avanzada', op: 'estrategias', pass: 15,
     title: 'Estrategias automáticas',
-    what: 'Git ofrece atajos para casos claros: <code>-X ours</code>, <code>-X theirs</code>, un driver <code>merge=ours</code> y la estrategia <code>union</code>. Sirven para archivos previsibles, pero no sustituyen la revisión.',
+    what: 'Git ofrece atajos para casos previsibles: <code>-X ours</code>, <code>-X theirs</code>, un driver <code>merge=ours</code> y la estrategia <code>union</code>. Reducen trabajo, pero no sustituyen la revisión del resultado.',
     steps: [
-      { code: '-X ours  ·  -X theirs', text: 'Prueba las dos estrategias en ramas desechables y comprueba qué se conserva.' },
-      { code: 'merge=ours', text: 'Configura un driver para archivos de lock que no deben cambiar.' },
-      { code: 'union', text: 'Conserva las dos líneas cuando ambas aportan información, y valida el resultado.' }
+      { code: '-X ours  ·  -X theirs', text: 'Ambas estrategias se prueban en ramas desechables y se comprueba qué se conserva.' },
+      { code: 'merge=ours', text: 'Se configura un driver para archivos de lock que no deben cambiar.' },
+      { code: 'union', text: 'Se conservan las dos líneas cuando ambas aportan información y se valida el resultado.' }
     ],
-    result: 'Árbol limpio. Cada estrategia hizo exactamente lo esperado.'
+    result: 'Árbol de trabajo limpio. Cada estrategia produjo el efecto esperado.'
   }
 ];
 
 const totalPass = exercises.reduce((s, e) => s + e.pass, 0);
 
 function foot() {
-  return `<div class="foot"><span>Conflictos de Git · Guía simple</span><span>{{PAGE}} / {{TOTAL}}</span></div>`;
+  return `<div class="foot"><span>Detección y resolución de conflictos · Guía simple</span><span>{{PAGE}} / {{TOTAL}}</span></div>`;
 }
 
 function head(eyebrow, title, sub) {
@@ -174,41 +176,49 @@ function cover() {
     <div class="cglow g1"></div><div class="cglow g2"></div>
     <div class="cgrid"></div>
     <div class="ctop">
-      <div class="ceyebrow">Guía práctica · Git</div>
-      <h1>Conflictos<br>de <em>Git</em></h1>
-      <p class="clead">Cómo entenderlos y resolverlos sin miedo.<br><b>10 ejercicios reales</b>, explicados paso a paso.</p>
+      <div class="ceyebrow">Detección y resolución de conflictos de código</div>
+      <h1>Merge<br><em>Conflicts</em></h1>
+      <p class="clead">Documentación de los <b>diez ejercicios</b> de detección y resolución de conflictos de código.<br>Ejecución real, procedimiento aplicado y resultado verificado.</p>
       <div class="cstats">
         <div><b>10/10</b><span>ejercicios</span></div>
         <div><b>57</b><span>comprobaciones</span></div>
         <div><b>0</b><span>fallos</span></div>
-        <div><b>${TOTAL_SHOTS}</b><span>capturas reales</span></div>
+        <div><b>${TOTAL_CMDS}</b><span>comandos explicados</span></div>
       </div>
     </div>
-    <div class="clist"><div class="clist-t">Las cinco miradas</div>${rows}</div>
+    <div class="clist"><div class="clist-t">Fases del proceso</div>${rows}</div>
     <div class="cfeatures"><span>10 ejercicios paso a paso</span><span>Mapa mental en Canvas HTML5</span><span>${TOTAL_SHOTS} capturas reales</span></div>
-    <div class="cfoot"><span>Ivan · Octubre 2026 · Windows 11</span><span>github.com/75749748-blip/conflictos-git-ejercicios</span></div>
-    <div class="cnote">Un conflicto no es un error: es una pausa para decidir.</div>
+    <div class="cindex">
+      <div><b>01</b><span>Marco conceptual</span></div>
+      <div><b>02</b><span>Metodología</span></div>
+      <div><b>03</b><span>Procedimiento</span></div>
+      <div><b>04</b><span>Ejercicios 01–10</span></div>
+      <div><b>05</b><span>Anexo A · Comandos</span></div>
+      <div><b>06</b><span>Resultados y conclusiones</span></div>
+    </div>
+    <div class="cfoot"><span>Ivan &lt;75749748@iegb.edu.pe&gt; · Octubre 2026 · equipo IVAN</span><span>github.com/75749748-blip/conflictos-git-ejercicios</span></div>
+    <div class="cnote">Un conflicto no es un error: es una decisión pendiente.</div>
   </section>`;
 }
 
 function pageIdeas() {
   const cards = [
-    ['01', 'Un conflicto no es un error', 'Git detuvo la operación para no perder trabajo. El repositorio sigue intacto; solo está esperando una decisión.'],
-    ['02', 'Git no elige por ti', 'Muestra las dos versiones y unas marcas. Elegir cuál se queda es una decisión humana, no un comando mágico.'],
-    ['03', 'Resolver es decidir', 'Puedes conservar un lado, combinar los dos o eliminar el archivo. Lo importante es que el resultado tenga sentido.']
+    ['01', 'El conflicto no es un fallo', 'Git detiene la operación para no perder trabajo. El repositorio permanece intacto y la decisión queda pendiente.'],
+    ['02', 'La decisión no es automática', 'Git muestra las dos versiones y unas marcas. La elección corresponde a quien mantiene el código.'],
+    ['03', 'Resolver equivale a decidir', 'Cabe conservar un lado, combinar los dos o eliminar el archivo. El resultado debe tener sentido para el proyecto.']
   ].map(([n, t, d]) => `<div class="idea"><span class="inum">${n}</span><h3>${t}</h3><p>${d}</p></div>`).join('');
 
   return `<section class="page p2">
-    ${head('Antes de empezar', 'Tres ideas que lo cambian todo', 'No hace falta memorizar comandos. Hace falta entender qué te está preguntando Git.')}
+    ${head('1 · Marco conceptual', 'Conceptos básicos', 'Definiciones necesarias para interpretar el estado del repositorio y las marcas de conflicto.')}
     <div class="ideas">${cards}</div>
-    <div class="label">LAS CUATRO PALABRAS QUE VERÁS</div>
+    <div class="label">DEFINICIONES BÁSICAS</div>
     <div class="gloss">
       <div><b>Rama</b><span>Una línea de trabajo paralela. <code>main</code> suele ser la principal.</span></div>
       <div><b>Merge</b><span>Une dos ramas en un commit nuevo que conserva las dos historias.</span></div>
       <div><b>Marcador</b><span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> y <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> separan las versiones en conflicto.</span></div>
-      <div><b>Índice</b><span>La zona donde preparas lo que irá en el próximo commit con <code>git add</code>.</span></div>
+      <div><b>Índice</b><span>Zona donde se prepara lo que entrará en el próximo commit mediante <code>git add</code>.</span></div>
     </div>
-    <div class="need"><b>Lo que necesitas:</b> Git instalado, una terminal, un editor de texto y este documento. Nada más.</div>
+    <div class="need"><b>Requisitos del entorno:</b> Windows 11, Git para Windows 2.56.0 y una terminal Git Bash.</div>
     <div class="example">
       <pre class="excode"><span class="mark">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
 linea 2 (main)
@@ -216,16 +226,16 @@ linea 2 (main)
 linea 2 (feature)
 <span class="mark">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</span></pre>
       <div class="extext">
-        <b>Cómo leer las marcas</b>
+        <b>Anatomía de las marcas</b>
         <ul>
-          <li><code>HEAD</code> es tu rama actual.</li>
+          <li><code>HEAD</code> identifica la rama actual.</li>
           <li><code>=======</code> separa las dos versiones.</li>
-          <li><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</code> nombra la rama que llega.</li>
+          <li><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</code> nombra la rama que se integra.</li>
         </ul>
-        <p>No borres las líneas sin leerlas: primero decide, después limpia.</p>
+        <p>Las marcas no se eliminan antes de leerlas: primero se decide y después se limpia el archivo.</p>
       </div>
     </div>
-    <div class="gold"><span>Regla de oro</span>Si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.</div>
+    <div class="gold"><span>Criterio general</span>Un cambio que no se comprende no debe resolverse: primero se consultan las dos versiones.</div>
     ${foot()}
   </section>`;
 }
@@ -240,34 +250,34 @@ function pageMap() {
   ].map(([n, t, d], i) => `<div class="mrow" style="--c:${['#0d9488','#2563eb','#d97706','#e11d48','#16a34a'][i]}"><span>${n}</span><div><b>${t}</b><small>${d}</small></div></div>`).join('');
 
   return `<section class="page p3">
-    ${head('Mapa mental', 'Cómo resolver un conflicto en cinco miradas', 'Las cuatro primeras ramas son el ciclo de resolución. La quinta es el hábito que evita repetirlo.')}
+    ${head('2 · Metodología', 'Modelo de resolución en cinco fases', 'Las cuatro primeras fases componen el ciclo de resolución; la quinta agrupa las prácticas que evitan su repetición.')}
     <div class="mapframe"><img src="${MAP}" alt="Mapa mental de cinco ramas: detectar, entender, resolver, verificar y prevenir"></div>
     <div class="mapgrid">${rows}
-      <div class="mgold"><b>Regla de oro</b><span>Si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.</span></div>
+      <div class="mgold"><b>Criterio general</b><span>Un cambio que no se comprende no debe resolverse: primero se consultan las dos versiones.</span></div>
     </div>
-    <p class="mapnote">Mapa dibujado con <b>Canvas HTML5</b> en <code>mapa-mental/mapa-mental.html</code>. Se puede abrir en el navegador y exportar en alta resolución.</p>
+    <p class="mapnote">Mapa elaborado con <b>Canvas HTML5</b> (<code>mapa-mental/mapa-mental.html</code>), disponible también como PNG de alta resolución.</p>
     ${foot()}
   </section>`;
 }
 
 function pageMethod() {
   const steps = [
-    ['1', 'Detectar', 'Mira el estado y localiza los archivos marcados.', 'git status --short'],
-    ['2', 'Entender', 'Compara las dos versiones antes de editar.', 'git diff'],
-    ['3', 'Resolver', 'Elige o combina; elimina todos los marcadores.', 'editor + git add'],
-    ['4', 'Verificar', 'Confirma que no quedan marcas y que todo pasa.', 'git diff --check']
+    ['1', 'Detectar', 'Se consulta el estado y se localizan los archivos marcados.', 'git status --short'],
+    ['2', 'Entender', 'Se comparan las dos versiones antes de editar.', 'git diff'],
+    ['3', 'Resolver', 'Se elige o se combina; se eliminan todos los marcadores.', 'editor + git add'],
+    ['4', 'Verificar', 'Se confirma que no quedan marcas y que las pruebas pasan.', 'git diff --check']
   ].map(([n, t, d, c], i) => `<div class="mstep" style="--c:${['#0d9488','#2563eb','#d97706','#e11d48'][i]}"><span class="mn">${n}</span><h3>${t}</h3><p>${d}</p><code>${c}</code></div>`).join('');
 
   const rows = exercises.map(e => `<tr><td class="c">${e.n}</td><td><b>${e.title}</b></td><td>${e.op}</td><td class="ok">${e.pass} PASS · 0 FAIL</td></tr>`).join('');
 
   return `<section class="page p4">
-    ${head('El método', 'Siempre el mismo orden', 'Si te pierdes a mitad de camino, vuelve al paso 1. El orden evita la mayoría de los errores.')}
+    ${head('3 · Procedimiento', 'Secuencia de resolución', 'El orden es constante. Si el análisis no es concluyente, se regresa al primer paso antes de editar.')}
     <div class="msteps">${steps}</div>
-    <div class="prevent"><b>5 · Prevenir</b><span>Ramas cortas, integrar seguido y avisar cuando dos personas tocan el mismo archivo.</span></div>
-    <div class="label">LOS 10 EJERCICIOS DE ESTA GUÍA</div>
+    <div class="prevent"><b>5 · Prevenir</b><span>Ramas cortas, integraciones frecuentes y aviso cuando dos personas trabajan sobre el mismo archivo.</span></div>
+    <div class="label">LOS 10 EJERCICIOS DOCUMENTADOS</div>
     <table class="overview"><thead><tr><th style="width:7%">#</th><th style="width:53%">Ejercicio</th><th style="width:17%">Operación</th><th style="width:23%">Resultado</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="usenote"><b>Cómo usar la guía.</b> Lee la página del ejercicio, revisa la secuencia de capturas y repite los pasos en un repositorio de prueba. Cada secuencia muestra los comandos tal como se ejecutaron en el equipo.</div>
-    <div class="label" style="margin-top:6mm">LOS ESTADOS QUE APARECEN EN GIT STATUS</div>
+    <div class="usenote"><b>Alcance del documento.</b> Cada ejercicio se documenta con su descripción, el procedimiento aplicado, la captura de consola y el resultado verificado. El anexo final reúne los comandos empleados, con su función y el motivo de su uso.</div>
+    <div class="label" style="margin-top:6mm">ESTADOS DE CONFLICTO EN GIT STATUS</div>
     <div class="states">
       <div><b>UU</b><span>Los dos modificaron el archivo.</span></div>
       <div><b>AA</b><span>Los dos añadieron el mismo archivo.</span></div>
@@ -282,11 +292,11 @@ function pageExercise(e) {
   const steps = e.steps.map((s, i) => `<div class="step"><span class="sn">${i + 1}</span><div class="st"><p>${s.text}</p><code>${s.code}</code></div></div>`).join('');
   const shots = SHOTS[e.n];
   return `<section class="page pex">
-    <div class="exhead"><div class="eyebrow">Ejercicio ${e.n} / 10 · ${e.difficulty}</div><span class="op">${e.op}</span></div>
+    <div class="exhead"><div class="eyebrow">4 · Ejercicio ${e.n} / 10 · ${e.difficulty}</div><span class="op">${e.op}</span></div>
     <h2 class="extitle">${e.title}</h2>
-    <div class="label">QUÉ ESTÁ PASANDO</div>
+    <div class="label">DESCRIPCIÓN DEL CASO</div>
     <p class="what">${e.what}</p>
-    <div class="label">CÓMO SE RESUELVE</div>
+    <div class="label">PROCEDIMIENTO APLICADO</div>
     <div class="steps">${steps}</div>
     <div class="result"><div class="rnum"><b>${e.pass}</b><span>PASS</span></div><div class="rdiv"></div><div class="rnum zero"><b>0</b><span>FAIL</span></div><div class="rdesc">${e.result}</div></div>
     <div class="shot"><img src="${shots[0]}" alt="Captura 1 de ${shots.length} del ejercicio ${e.n}: ${e.title}"><div class="cap"><span>Captura real 1 de ${shots.length} · consola del equipo</span><span>${e.pass} PASS · 0 FAIL</span></div></div>
@@ -309,10 +319,53 @@ function pageEvidence(e, group) {
   </section>`;
 }
 
+// ------------------------------------------------------- diccionario -------
+// Cada comando del taller, en una tabla: qué hace y por qué se usó. Está
+// pensado para quien nunca ha usado Git, pero sin gastar una página por
+// comando.
+function glossaryUnits() {
+  const units = [];
+  for (const g of grupos) {
+    units.push({ type: 'group', titulo: g.titulo, nota: g.nota });
+    for (const it of g.items) units.push({ type: 'cmd', it });
+  }
+  return units;
+}
+
+function glossaryChunks() {
+  const units = glossaryUnits();
+  const size = Math.ceil(units.length / 3);
+  const chunks = [];
+  for (let i = 0; i < units.length; i += size) chunks.push(units.slice(i, i + size));
+  // Si una página termina en un título de grupo, el título pasa a la siguiente.
+  for (let i = 0; i < chunks.length - 1; i++) {
+    while (chunks[i].length && chunks[i][chunks[i].length - 1].type === 'group') {
+      chunks[i + 1].unshift(chunks[i].pop());
+    }
+  }
+  return chunks;
+}
+
+function pageGlossary(chunk, index, total) {
+  const rows = chunk.map(u => u.type === 'group'
+    ? `<tr class="ghead"><td colspan="2">${esc(u.titulo)}</td></tr>`
+    : `<tr><td class="gc"><code>${esc(u.it.c)}</code></td><td><b>Función.</b> ${esc(u.it.q)}<br><b>Motivo de uso.</b> ${esc(u.it.p)}</td></tr>`).join('');
+  const intro = index === 0
+    ? `<p class="gintro"><b>${TOTAL_CMDS} comandos.</b> Se indica la función de cada uno y el motivo de su empleo en los ejercicios. Todos aparecen en las capturas de las páginas anteriores.</p>`
+    : '';
+  return `<section class="page pglo">
+    <div class="exhead"><div class="eyebrow">Anexo A · Diccionario de comandos · ${index + 1} / ${total}</div><span class="op">${TOTAL_CMDS} comandos</span></div>
+    <h2 class="extitle">Comandos empleados</h2>
+    ${intro}
+    <table class="gtable"><thead><tr><th style="width:37%">Comando</th><th>Función y motivo de uso</th></tr></thead><tbody>${rows}</tbody></table>
+    ${foot()}
+  </section>`;
+}
+
 function pageResults() {
   const rows = exercises.map(e => `<tr><td class="c">${e.n}</td><td>${e.title}</td><td class="num">${e.pass}</td><td class="num">0</td><td class="ok">✓ Verificado</td></tr>`).join('');
   return `<section class="page p5">
-    ${head('Resultados', '10 ejercicios, 57 comprobaciones', 'Cada número sale de la última línea del log real: RESULTADO: N PASS, 0 FAIL.')}
+    ${head('5 · Resultados', 'Resultados de la ejecución', 'Cada cifra procede de la última línea del registro de ejecución: RESULTADO: N PASS, 0 FAIL.')}
     <div class="bigstats">
       <div><b>10/10</b><span>ejercicios completados</span></div>
       <div><b>57</b><span>comprobaciones PASS</span></div>
@@ -320,13 +373,13 @@ function pageResults() {
       <div><b>${TOTAL_SHOTS}</b><span>capturas reales</span></div>
     </div>
     <table class="results"><thead><tr><th style="width:7%">#</th><th style="width:55%">Ejercicio</th><th style="width:10%">PASS</th><th style="width:10%">FAIL</th><th style="width:18%">Estado</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="oknote"><b>Qué significa “verificado”.</b> El script creó el conflicto, aplicó la resolución y ejecutó comprobaciones automáticas. El árbol de trabajo quedó limpio, sin marcadores, en los diez casos.</div>
+    <div class="oknote"><b>Criterio de verificación.</b> Cada script genera el conflicto, aplica la resolución y ejecuta comprobaciones automáticas. En los diez casos el árbol de trabajo quedó limpio y sin marcadores.</div>
     <div class="coverage"><div class="label">OPERACIONES CUBIERTAS</div><div class="tags"><span>merge</span><span>rebase</span><span>cherry-pick</span><span>stash pop</span><span>binarios</span><span>mergetool</span><span>estrategias</span></div></div>
-    <div class="label" style="margin-top:7mm">CÓMO SE GENERÓ LA EVIDENCIA</div>
+    <div class="label" style="margin-top:7mm">OBTENCIÓN DE LA EVIDENCIA</div>
     <div class="evid">
-      <div><span>1</span><b>Se crea el conflicto</b><p>Un script prepara un repositorio temporal y provoca el choque real.</p></div>
-      <div><span>2</span><b>Se resuelve y valida</b><p>El ejercicio aplica la solución y ejecuta comprobaciones PASS/FAIL.</p></div>
-      <div><span>3</span><b>Se guarda la prueba</b><p>Las capturas de consola y el log completo quedan en el repositorio.</p></div>
+      <div><span>1</span><b>Generación del conflicto</b><p>Un script prepara un repositorio temporal y provoca el conflicto.</p></div>
+      <div><span>2</span><b>Resolución y validación</b><p>Se aplica la solución y se ejecutan comprobaciones PASS/FAIL.</p></div>
+      <div><span>3</span><b>Registro de la evidencia</b><p>Las capturas de consola y el registro completo se incorporan al repositorio.</p></div>
     </div>
     ${foot()}
   </section>`;
@@ -334,37 +387,37 @@ function pageResults() {
 
 function pageClose() {
   return `<section class="page p6">
-    ${head('Para cerrar', 'Tu chuleta de bolsillo', 'Lo que conviene recordar cuando la terminal se pone en rojo.')}
+    ${head('6 · Conclusiones', 'Procedimiento de contingencia', 'Actuación prevista cuando la resolución no es evidente.')}
     <div class="cols">
       <div class="col">
-        <h3>Si te bloqueas</h3>
+        <h3>Cuando la resolución no es clara</h3>
         <ol class="cl">
-          <li>No borres el archivo ni la carpeta <code>.git</code>.</li>
-          <li>Ejecuta <code>git status --short</code> y mira qué archivos están en conflicto.</li>
-          <li>Ejecuta <code>git diff</code> y lee las dos versiones antes de editar.</li>
-          <li>Si te pierdes, aborta: <code>git merge --abort</code>, <code>git rebase --abort</code> o <code>git cherry-pick --abort</code>.</li>
-          <li>Vuelve a empezar con calma. Abortar también es una solución válida.</li>
+          <li>No se elimina el archivo ni la carpeta <code>.git</code>.</li>
+          <li>Se ejecuta <code>git status --short</code> para identificar los archivos en conflicto.</li>
+          <li>Se ejecuta <code>git diff</code> y se leen ambas versiones antes de editar.</li>
+          <li>Si el análisis no concluye, se aborta la operación: <code>git merge --abort</code>, <code>git rebase --abort</code> o <code>git cherry-pick --abort</code>.</li>
+          <li>Abortar es una salida válida: la operación puede repetirse desde el inicio.</li>
         </ol>
       </div>
       <div class="col">
-        <h3>Nunca hagas esto</h3>
+        <h3>Errores que deben evitarse</h3>
         <ul class="cl no">
-          <li>Commitear un archivo que todavía contiene <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>.</li>
-          <li>Usar <code>-X ours</code> o <code>-X theirs</code> sin leer los cambios.</li>
-          <li>Borrar <code>.git</code> para “arreglar” un conflicto.</li>
-          <li>Resolver a ciegas solo para que el comando termine.</li>
+          <li>Confirmar un archivo que todavía contiene <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>.</li>
+          <li>Aplicar <code>-X ours</code> o <code>-X theirs</code> sin revisar los cambios.</li>
+          <li>Eliminar <code>.git</code> para resolver un conflicto.</li>
+          <li>Resolver sin analizar, solo para que el comando finalice.</li>
         </ul>
-        <div class="minigold"><b>La pregunta correcta</b><span>¿Qué quería hacer cada lado?</span></div>
+        <div class="minigold"><b>Cuestión central</b><span>¿Qué pretendía cada uno de los dos lados?</span></div>
       </div>
     </div>
-    <div class="label">DÓNDE ESTÁ TODO</div>
-    <div class="repo"><b>Repositorio público</b><a href="${REPO}">${REPO.replace('https://', '')}</a><div class="tree"><span><code>ejercicios/</code> scripts y logs</span><span><code>build/real-captures/</code> capturas de consola</span><span><code>mapa-mental/</code> canvas HTML5 y PNG</span><span><code>documentacion/</code> esta guía</span></div></div>
-    <div class="label" style="margin-top:7mm">CHECKLIST ANTES DE CONFIRMAR</div>
+    <div class="label">UBICACIÓN DE LA EVIDENCIA</div>
+    <div class="repo"><b>Repositorio público</b><a href="${REPO}">${REPO.replace('https://', '')}</a><div class="tree"><span><code>ejercicios/</code> scripts y logs</span><span><code>build/real-captures/</code> capturas de consola</span><span><code>mapa-mental/</code> canvas HTML5 y PNG</span><span><code>documentacion/</code> este documento</span></div></div>
+    <div class="label" style="margin-top:7mm">LISTA DE COMPROBACIÓN PREVIA AL COMMIT</div>
     <div class="checklist">
-      <div><span>✓</span>No quedan marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code></div>
-      <div><span>✓</span><code>git diff --check</code> no muestra errores</div>
-      <div><span>✓</span>Las pruebas del proyecto pasan</div>
-      <div><span>✓</span>Entiendo qué cambió cada lado</div>
+      <div><span>✓</span>Sin marcas pendientes <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code></div>
+      <div><span>✓</span><code>git diff --check</code> sin errores</div>
+      <div><span>✓</span>Pruebas del proyecto superadas</div>
+      <div><span>✓</span>Cambio de cada lado comprendido</div>
     </div>
     <div class="closing"><p>Un conflicto bien resuelto deja el historial más claro, no más sucio.</p><span>10/10 ejercicios · 57 PASS · 0 FAIL</span></div>
     ${foot()}
@@ -373,14 +426,9 @@ function pageClose() {
 
 function html() {
   const pages = [cover(), pageIdeas(), pageMap(), pageMethod()];
-  for (const e of exercises) {
-    pages.push(pageExercise(e));
-    const shots = SHOTS[e.n];
-    for (let i = 1; i < shots.length; i += 2) {
-      const group = shots.slice(i, i + 2).map((src, j) => ({ src, k: i + j + 1 }));
-      pages.push(pageEvidence(e, group));
-    }
-  }
+  for (const e of exercises) pages.push(pageExercise(e));
+  const chunks = glossaryChunks();
+  chunks.forEach((c, i) => pages.push(pageGlossary(c, i, chunks.length)));
   pages.push(pageResults(), pageClose());
   const total = String(pages.length).padStart(2, '0');
   const body = pages
@@ -388,7 +436,7 @@ function html() {
     .join('')
     .replace(/\{\{TOTAL\}\}/g, total);
 
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Conflictos de Git · Guía simple</title><style>
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Detección y resolución de conflictos de código · Guía simple</title><style>
     @page { size: A4; margin: 0; }
     * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     html, body { margin: 0; padding: 0; background: #fff; }
@@ -429,6 +477,9 @@ function html() {
     .cnote { position: absolute; left: 18mm; bottom: 26mm; font-size: 9.6pt; color: #5eead4; z-index: 2; }
     .cfeatures { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 2.5mm; margin-top: 5mm; }
     .cfeatures span { font-size: 7.8pt; color: #cbd5e1; border: .3mm solid rgba(148,163,184,.30); border-radius: 10mm; padding: 1.6mm 3mm; background: rgba(255,255,255,.04); }
+    .cindex { position: relative; z-index: 2; margin-top: 9mm; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.6mm 6mm; }
+    .cindex div { display: flex; gap: 2.6mm; align-items: baseline; font-size: 8.6pt; color: #cbd5e1; border-top: .25mm solid rgba(148,163,184,.22); padding-top: 2.2mm; }
+    .cindex b { color: #2dd4bf; font-size: 7.4pt; letter-spacing: .1em; }
     .cfoot { position: absolute; left: 18mm; right: 18mm; bottom: 12mm; display: flex; justify-content: space-between; font-size: 7.4pt; color: #64748b; z-index: 2; }
 
     /* Página 2 */
@@ -518,8 +569,19 @@ function html() {
     .shot img { display: block; width: 144mm; margin: 0 auto; border: .3mm solid #1e293b; border-radius: 2mm; background: #0b1220; }
     .cap { display: flex; justify-content: space-between; width: 144mm; margin: 1.4mm auto 0; font-size: 7.2pt; color: #94a3b8; }
 
-    /* Páginas de evidencia: secuencia completa de la consola */
-    .pev { padding-bottom: 18mm; }
+    /* Diccionario de comandos */
+    .pglo .extitle { font-size: 17pt; margin: 0 0 1.8mm; }
+    .gintro { margin: 0 0 2.4mm; font-size: 8.4pt; line-height: 1.45; color: #475569; }
+    .gintro b { color: #0f766e; }
+    .gtable { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 7.3pt; }
+    .gtable th { background: #0f766e; color: #fff; text-align: left; padding: 1.5mm 2mm; font-size: 6.9pt; letter-spacing: .1em; text-transform: uppercase; }
+    .gtable td { padding: 1.3mm 2mm; border-bottom: .25mm solid #e2e8f0; vertical-align: top; line-height: 1.38; color: #475569; }
+    .gtable td.gc { padding-right: 3mm; }
+    .gtable td.gc code { font-family: Consolas, 'Courier New', monospace; font-size: 7.5pt; font-weight: 700; color: #0f766e; word-break: break-word; }
+    .gtable td b { color: #0f172a; }
+    .gtable tr.ghead td { background: #f0fdfa; color: #0f766e; font-weight: 800; font-size: 7.2pt; letter-spacing: .05em; text-transform: uppercase; padding: 1.8mm 2mm; border-bottom: .4mm solid #99f6e4; }
+
+    /* Páginas de evidencia: secuencia completa de la consola */    .pev { padding-bottom: 18mm; }
     .evlead { margin: 0 0 3.2mm; font-size: 8.4pt; line-height: 1.45; color: #475569; background: #f8fafc; border: .3mm solid #e8eef5; border-radius: 2.4mm; padding: 2.4mm 3.2mm; }
     .evlead b { color: #0f172a; }
     .evwrap { display: flex; flex-direction: column; gap: 3.2mm; }

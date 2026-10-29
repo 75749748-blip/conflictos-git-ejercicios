@@ -83,7 +83,7 @@
     <div>
       <div class="kicker">Documentación visual · Git</div>
       <h1>Mapa mental: resolver un conflicto</h1>
-      <p>Cinco ramas, una idea: Git pausa la operación y tú decides. El mapa está dibujado con <strong>Canvas HTML5</strong> real, sin imágenes externas, y se puede exportar en alta resolución.</p>
+      <p>Cinco ramas y una idea central: Git interrumpe la operación y la decisión queda pendiente. El mapa está dibujado con <strong>Canvas HTML5</strong>, sin imágenes externas, y puede exportarse en alta resolución.</p>
     </div>
     <div class="actions">
       <button onclick="downloadPng()">Descargar PNG</button>
@@ -107,17 +107,17 @@
     </article>
     <article style="--c:#2563eb">
       <h3><span class="n">2</span> Entender</h3>
-      <p>No se trata de borrar marcas, sino de saber qué quería cada lado. Compara tu versión, la del otro y la base común.</p>
+      <p>No se trata de borrar marcas, sino de determinar qué pretendía cada lado. Se comparan la versión local, la remota y la base común.</p>
       <p><strong>Clave:</strong> <code>git diff</code> y <code>git show :1: :2: :3:</code></p>
     </article>
     <article style="--c:#d97706">
       <h3><span class="n">3</span> Resolver</h3>
-      <p>Elige una versión, combina las dos o elimina el archivo. Después borra todos los marcadores y guarda el resultado.</p>
+      <p>Se elige una versión, se combinan las dos o se elimina el archivo. Después se retiran todos los marcadores y se guarda el resultado.</p>
       <p><strong>Regla:</strong> una decisión por cada bloque.</p>
     </article>
     <article style="--c:#e11d48">
       <h3><span class="n">4</span> Verificar</h3>
-      <p>Comprueba que no quedan marcas, que las pruebas pasan y que el árbol queda limpio antes de confirmar.</p>
+      <p>Se comprueba que no quedan marcas, que las pruebas pasan y que el árbol queda limpio antes de confirmar.</p>
       <p><strong>Clave:</strong> <code>git diff --check</code></p>
     </article>
     <article style="--c:#16a34a">
@@ -127,15 +127,15 @@
     </article>
     <article style="--c:#64748b;border-left-color:#64748b">
       <h3><span class="n" style="--c:#64748b;border-color:#94a3b8;color:#64748b">✓</span> Resultado</h3>
-      <p>Un conflicto no es un error: es una pausa para tomar una decisión. Al terminarlo, el historial sigue y el trabajo de ambos lados se conserva.</p>
+      <p>Un conflicto no es un error: es una decisión pendiente. Al resolverlo, el historial continúa y el trabajo de ambos lados se conserva.</p>
     </article>
   </section>
 
   <section class="two">
     <div class="panel">
       <h2>El método en 4 pasos</h2>
-      <p>Las cuatro primeras ramas son el ciclo de resolución. La quinta es lo que evita repetirlo:</p>
-      <p><b>1.</b> Detecta el estado y los archivos afectados. <b>2.</b> Entiende las dos versiones. <b>3.</b> Resuelve bloque por bloque. <b>4.</b> Verifica y confirma.</p>
+      <p>Las cuatro primeras ramas componen el ciclo de resolución. La quinta agrupa las prácticas que evitan su repetición:</p>
+      <p><b>1.</b> Se detecta el estado y los archivos afectados. <b>2.</b> Se comparan las dos versiones. <b>3.</b> Se resuelve bloque por bloque. <b>4.</b> Se verifica y se confirma.</p>
       <div class="flow">
         <span>Detectar</span><span>Entender</span><span>Resolver</span><span>Verificar</span><span>Prevenir</span>
       </div>
@@ -153,7 +153,7 @@
 
   <footer class="foot">
     <span>Mapa mental · Conflictos de Git · Canvas HTML5</span>
-    <span>Regla de oro: si no entiendes el cambio, no lo resuelvas.</span>
+    <span>Criterio general: un cambio que no se comprende no debe resolverse.</span>
   </footer>
 </div>
 
@@ -165,15 +165,15 @@
 
   const cards = [
     { x: 70,   y: 140, w: 480, h: 230, accent: '#0d9488', soft: '#f0fdfa', n: '1', title: 'Detectar',
-      lines: ['git status --short', 'Archivos marcados UU', 'Busca <<<<<<<'] },
+      lines: ['git status --short', 'Archivos marcados UU', 'Localizar <<<<<<<'] },
     { x: 1250, y: 140, w: 480, h: 230, accent: '#2563eb', soft: '#eff6ff', n: '2', title: 'Entender',
-      lines: ['¿Qué cambió cada lado?', 'git diff y las 3 versiones', 'No borres nada todavía'] },
+      lines: ['Qué cambió cada lado', 'git diff y las 3 versiones', 'Sin editar todavía'] },
     { x: 70,   y: 780, w: 480, h: 230, accent: '#d97706', soft: '#fffbeb', n: '3', title: 'Resolver',
-      lines: ['Abre el archivo', 'Elige, combina o elimina', 'Quita los marcadores'] },
+      lines: ['Abrir el archivo', 'Elegir, combinar o eliminar', 'Quitar los marcadores'] },
     { x: 1250, y: 780, w: 480, h: 230, accent: '#e11d48', soft: '#fff1f2', n: '4', title: 'Verificar',
-      lines: ['git diff --check', 'Ejecuta las pruebas', 'git add y git commit'] },
+      lines: ['git diff --check', 'Ejecutar las pruebas', 'git add y git commit'] },
     { x: 660,  y: 900, w: 480, h: 200, accent: '#16a34a', soft: '#f0fdf4', n: '5', title: 'Prevenir',
-      lines: ['Ramas cortas · integrar seguido', 'Avisar antes de tocar lo mismo'] }
+      lines: ['Ramas cortas · integrar seguido', 'Avisar antes de editar lo mismo'] }
   ];
 
   const center = { x: 675, y: 465, w: 450, h: 270 };
@@ -351,7 +351,7 @@
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '400 19px "Segoe UI", Arial, sans-serif';
-    ctx.fillText('Git pausa. Tú decides.', cx, center.y + 214);
+    ctx.fillText('Git pausa. La decisión queda pendiente.', cx, center.y + 214);
   }
 
   function drawFooter() {
@@ -359,8 +359,8 @@
     ctx.textBaseline = 'alphabetic';
     ctx.textAlign = 'left';
     ctx.font = '700 20px "Segoe UI", Arial, sans-serif';
-    const strong = 'Regla de oro: ';
-    const rest = 'si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.';
+    const strong = 'Criterio general: ';
+    const rest = 'un cambio que no se comprende no debe resolverse. Primero se consultan las dos versiones.';
     const total = ctx.measureText(strong).width + ctx.measureText(rest).width;
     let x = (W - total) / 2;
     ctx.fillStyle = '#0f766e';

@@ -1,6 +1,6 @@
-# Conflictos de código en Git — Ejercicios verificados
+# Detección y resolución de conflictos de código
 
-Documentación y evidencia de los **10 ejercicios prácticos** de la guía de conflictos de Git. Cada ejercicio se ejecutó en un repositorio temporal real, se resolvió y se validó con comprobaciones automáticas. La **guía simple** es la entrega principal; la guía completa y la documentación técnica quedan como material de ampliación.
+Documentación de los **10 ejercicios prácticos** sobre conflictos de Git. Cada ejercicio se ejecutó en un repositorio temporal, se resolvió y se validó con comprobaciones automáticas. La entrega principal es la **guía de 19 páginas**; el anexo técnico, la presentación y el repositorio reúnen la evidencia.
 
 > **Resultado global:** 10/10 ejercicios ejecutados, **57 comprobaciones PASS y 0 FAIL**.
 >
@@ -14,16 +14,25 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 
 | Documento | Enlace |
 |---|---|
-| **Guía simple (PDF)** | **[documentacion/Conflictos-Git-Guia-Simple.pdf](documentacion/Conflictos-Git-Guia-Simple.pdf)** |
+| **Guía principal (PDF, 19 páginas)** | **[documentacion/Conflictos-Git-Guia-Simple.pdf](documentacion/Conflictos-Git-Guia-Simple.pdf)** |
+| Anexo técnico (PDF, 13 páginas) | [documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
 | Mapa mental (Canvas HTML5) | [mapa-mental/mapa-mental.html](mapa-mental/mapa-mental.html) · [PNG](mapa-mental/mapa-mental.png) · [vista documentada](mapa-mental/vista-documentada.png) |
-| Guía completa (Markdown) | [Guia-Conflictos-Git.md](Guia-Conflictos-Git.md) |
-| Guía completa (PDF) | [Guia-Conflictos-Git.pdf](Guia-Conflictos-Git.pdf) |
-| Presentación animada (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
-| Presentación animada (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
-| Documentación técnica con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
-| Capturas de las sesiones | [build/real-captures/seq/](build/real-captures/seq/) |
+| Presentación (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
+| Presentación (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
+| Guía extensa (Markdown) | [Guia-Conflictos-Git.md](Guia-Conflictos-Git.md) |
+| Guía extensa (PDF, consulta) | [Guia-Conflictos-Git.pdf](Guia-Conflictos-Git.pdf) |
 | Galería HTML de los 10 ejercicios | [build/galeria-ejercicios.html](build/galeria-ejercicios.html) |
+| Capturas de las sesiones | [build/real-captures/seq/](build/real-captures/seq/) |
 | Scripts y logs | [ejercicios/](ejercicios/) |
+
+## Estructura de la guía
+
+1. **Marco conceptual**: qué es un conflicto, por qué Git se detiene y cómo se leen las marcas.
+2. **Metodología**: modelo de resolución en cinco fases, con el mapa mental en Canvas HTML5.
+3. **Procedimiento**: secuencia aplicada (detectar, entender, resolver, verificar, prevenir).
+4. **Ejercicios 01–10**: descripción del caso, procedimiento y captura real de la consola.
+5. **Anexo A · Diccionario**: 49 comandos con su función y el motivo de uso.
+6. **Resultados y conclusiones**: 57 comprobaciones, 0 fallos y pautas de contingencia.
 
 ## Los 10 ejercicios
 
@@ -74,13 +83,13 @@ bash 06-rebase.sh
 
 ## Evidencia
 
-- **51 capturas reales de consola** en [`build/real-captures/seq/`](build/real-captures/seq/): cada ejercicio tiene su propia carpeta (`01/` … `10/`) con 4–10 imágenes. Se tomaron de la ventana de comandos de este equipo mientras los scripts se ejecutaban: no se reconstruyeron desde los logs.
+- **51 capturas reales de consola** en [`build/real-captures/seq/`](build/real-captures/seq/): cada ejercicio tiene su propia carpeta (`01/` … `10/`) con 4–10 imágenes. Se tomaron de la ventana de comandos de este equipo mientras los scripts se ejecutaban; no se reconstruyeron desde los logs.
 - El script se detiene cada **36 filas**, el runner fotografía la consola real y luego continúa. Entre todas las imágenes de un ejercicio aparecen **todos los comandos (`$ …`) y todas sus salidas**, además del `RESULTADO: N PASS, 0 FAIL` final.
 - Encabezado de entorno en cada ejecución: equipo (`IVAN`), usuario (`Ivan`), fecha, versión de Git e identidad (`Ivan <75749748@iegb.edu.pe>`).
-- **23 capturas de terminal** en [`capturas/`](capturas/): versión ilustrada de la documentación técnica, generada desde los logs con `build/make-captures.js`.
 - Cada log contiene la salida de Git, los comandos ejecutados y el bloque `RESULTADO: N PASS, 0 FAIL`.
 - El **mapa mental** está dibujado con Canvas HTML5 en [`mapa-mental/mapa-mental.html`](mapa-mental/mapa-mental.html); el PNG se exporta a 3600 × 2500 px.
-- La guía simple tiene **40 páginas**: el mapa, el método de 4 pasos, una página por ejercicio y páginas de evidencia con la secuencia completa de capturas.
+- La guía principal tiene **19 páginas**: marco conceptual, metodología, procedimiento, una página por ejercicio con su captura, diccionario de 49 comandos, resultados y conclusiones.
+- El anexo técnico tiene **13 páginas**: una ficha por ejercicio con su captura de cierre y la validación automática.
 - La galería [`build/galeria-ejercicios.html`](build/galeria-ejercicios.html) reúne las 51 capturas en una sola página.
 
 ### Volver a tomar las capturas
@@ -97,11 +106,15 @@ Requiere Windows, Git para Windows y una sesión de escritorio activa: la captur
 
 ```bash
 cd build
-node make-doc-simple.js        # PDF de 40 páginas en documentacion/
-node make-exercise-gallery.js  # galeria-ejercicios.html
+node make-canvas-map.js         # mapa-mental.png y vista-documentada.png
+node make-doc-simple.js         # guía principal de 19 páginas
+node make-doc.js                # anexo técnico de 13 páginas
+node make-ppt.js                # presentación PPTX
+node make-exercise-gallery.js   # galeria-ejercicios.html
 ```
 
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build\animate-ppt.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build\package-desktop.ps1
 ```
 
@@ -114,43 +127,32 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build\package-desktop.ps1
 ├── Conflictos-Git-Presentacion.pptx
 ├── Conflictos-Git-Presentacion.pdf
 ├── documentacion/
-│   ├── Conflictos-Git-Guia-Simple.pdf
-│   └── Documentacion-Ejercicios-Conflictos-Git.pdf
+│   ├── Conflictos-Git-Guia-Simple.pdf          (guía principal, 19 páginas)
+│   └── Documentacion-Ejercicios-Conflictos-Git.pdf  (anexo técnico, 13 páginas)
 ├── mapa-mental/
 │   ├── mapa-mental.html
-│   └── mapa-mental.png
-├── build/real-captures/
-│   ├── seq/
-│   │   ├── 01/01.png … 04.png
-│   │   ├── ...
-│   │   └── 10/01.png … 10.png      (51 capturas reales)
-│   ├── run-01.cmd … run-10.cmd
-│   ├── capture-seq.ps1             (runner de capturas por tramos)
-│   └── capture-all.ps1             (versión anterior, solo el resumen)
-├── capturas/
-│   ├── 01-conflicto-simple/
-│   ├── ...
-│   └── 10-estrategias/
+│   ├── mapa-mental.png
+│   └── vista-documentada.png
+├── build/
+│   ├── real-captures/
+│   │   ├── seq/                                (51 capturas reales)
+│   │   ├── run-01.cmd … run-10.cmd
+│   │   ├── capture-seq.ps1
+│   │   └── capture-window.ps1
+│   ├── comandos.js                             (49 comandos del diccionario)
+│   ├── make-doc-simple.js
+│   ├── make-doc.js
+│   ├── make-canvas-map.js
+│   ├── make-ppt.js
+│   ├── make-exercise-gallery.js
+│   ├── galeria-ejercicios.html
+│   └── package-desktop.ps1
 ├── ejercicios/
 │   ├── lib.sh
-│   ├── 01-conflicto-simple.sh
-│   ├── ...
-│   ├── 10-estrategias.sh
+│   ├── 01-conflicto-simple.sh … 10-estrategias.sh
 │   ├── run-all.sh
 │   └── logs/
-└── build/
-    ├── make-pdf.js
-    ├── make-captures.js
-    ├── make-doc.js
-    ├── make-doc-simple.js
-    ├── make-exercise-gallery.js
-    ├── capture-window.ps1
-    ├── package-desktop.ps1
-    ├── make-canvas-map.js
-    ├── make-ppt.js
-    ├── animate-ppt.ps1
-    ├── exercises-data.js
-    └── mapa-mental.png / mapa-conceptual-compact.png
+└── capturas/                                   (capturas de la guía extensa)
 ```
 
 ## Nota sobre los repositorios de práctica

@@ -5,15 +5,15 @@ const OUT = path.join(__dirname, 'galeria-ejercicios.html');
 const SEQ = path.join(__dirname, '..', 'build', 'real-captures', 'seq');
 
 const exercises = [
-  ['01', 'Conflicto simple en una línea', 'Básica', 'merge', 5, 'Las dos ramas cambiaron la misma línea de app.txt. Git deja las dos versiones entre marcas y espera que decidas.', 'Árbol limpio. app.txt conserva los dos cambios.'],
+  ['01', 'Conflicto simple en una línea', 'Básica', 'merge', 5, 'Las dos ramas cambiaron la misma línea de app.txt. Git deja las dos versiones entre marcas y espera una decisión.', 'Árbol limpio. app.txt conserva los dos cambios.'],
   ['02', 'Varios conflictos en un archivo', 'Intermedia', 'merge', 6, 'config.ini tiene dos zonas en conflicto: el nombre y el nivel de log. Cada zona se decide por separado.', 'Árbol limpio. Las dos zonas quedaron resueltas.'],
   ['03', 'Conflicto modificar / eliminar', 'Intermedia', 'merge', 4, 'Una rama editó notas.txt y la otra lo eliminó. Hay que decidir si el archivo debe seguir existiendo.', 'Árbol limpio. Se documentó la solución de eliminar notas.txt.'],
   ['04', 'Conflicto añadir / añadir', 'Intermedia', 'merge', 5, 'Dos ramas crearon el mismo CHANGELOG.md con contenidos distintos. No hay versión base que sirva de referencia.', 'Árbol limpio. Un solo CHANGELOG con las dos entradas.'],
   ['05', 'Conflicto con un archivo binario', 'Intermedia', 'merge', 4, 'logo.bin es binario: Git no puede comparar su contenido ni mostrar marcas. Solo puede quedarse con una versión completa.', 'Árbol limpio. logo.bin quedó con la versión de feature.'],
-  ['06', 'Conflicto durante un rebase', 'Avanzada', 'rebase', 5, 'En un rebase, ours es la rama base y theirs es tu commit: justo al revés que en un merge.', 'Historia lineal. No hay merge commit.'],
+  ['06', 'Conflicto durante un rebase', 'Avanzada', 'rebase', 5, 'En un rebase, ours es la rama base y theirs es el commit propio: al revés que en un merge.', 'Historia lineal. No hay merge commit.'],
   ['07', 'Conflicto en un cherry-pick', 'Avanzada', 'cherry-pick', 5, 'Cherry-pick copia un commit concreto de main sobre feature. El parche ya no encaja y Git pausa.', 'Árbol limpio. El cambio se aplicó una sola vez.'],
-  ['08', 'Conflicto al recuperar un stash', 'Intermedia', 'stash pop', 4, 'Guardaste trabajo a medias, main avanzó y al recuperarlo choca con el commit nuevo.', 'Árbol limpio. El WIP se recuperó y el stash quedó vacío.'],
-  ['09', 'Inspección y herramienta de merge', 'Intermedia', 'mergetool', 4, 'Antes de editar conviene reconstruir la base (:1:), tu lado (:2:) y el otro (:3:). La mergetool ayuda a elegir.', 'Árbol limpio. config.txt resuelto con información completa.'],
+  ['08', 'Conflicto al recuperar un stash', 'Intermedia', 'stash pop', 4, 'El trabajo a medias se guardó, main avanzó y, al recuperarlo, choca con el commit nuevo.', 'Árbol limpio. El WIP se recuperó y el stash quedó vacío.'],
+  ['09', 'Inspección y herramienta de merge', 'Intermedia', 'mergetool', 4, 'Antes de editar conviene reconstruir la base (:1:), la versión local (:2:) y la remota (:3:). La mergetool ayuda a elegir.', 'Árbol limpio. config.txt resuelto con información completa.'],
   ['10', 'Estrategias automáticas', 'Avanzada', 'estrategias', 15, 'Git ofrece atajos para casos claros: -X ours, -X theirs, merge=ours y union. No sustituyen la revisión.', 'Árbol limpio. Cada estrategia hizo lo esperado.']
 ];
 
