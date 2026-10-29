@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 06-rebase.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:59:04
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-06-rebase
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-06-rebase
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-06-rebase/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ git config merge.conflictStyle zdiff3
 
@@ -16,7 +25,7 @@ $ printf 'version = 1\n' > version.txt
 $ git add version.txt
 
 $ git commit -m "base: version 1"
-[main (root-commit) 36bc557] base: version 1
+[main (root-commit) c2d19a3] base: version 1
  1 file changed, 1 insertion(+)
  create mode 100644 version.txt
 
@@ -26,7 +35,7 @@ Switched to a new branch 'feature'
 $ printf 'version = 2-feature\n' > version.txt
 
 $ git commit -am "feature: version 2"
-[feature f1f88a2] feature: version 2
+[feature 86bfeb1] feature: version 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -35,7 +44,7 @@ Switched to branch 'main'
 $ printf 'version = 2-main\n' > version.txt
 
 $ git commit -am "main: version 2"
-[main 5aafd33] main: version 2
+[main 3ed38c7] main: version 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch feature
@@ -46,21 +55,21 @@ Switched to branch 'feature'
 $ git rebase main
 Rebasing (1/1)Auto-merging version.txt
 CONFLICT (content): Merge conflict in version.txt
-error: could not apply f1f88a2... feature: version 2
+error: could not apply 86bfeb1... feature: version 2
 hint: Resolve all conflicts manually, mark them as resolved with
 hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
 hint: You can instead skip this commit: run "git rebase --skip".
 hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
 hint: Disable this message with "git config set advice.mergeConflict false"
-Could not apply f1f88a2... # feature: version 2
+Could not apply 86bfeb1... # feature: version 2
 [exit 1]
 
 $ git status
-interactive rebase in progress; onto 5aafd33
+interactive rebase in progress; onto 3ed38c7
 Last command done (1 command done):
-   pick f1f88a2 # feature: version 2
+   pick 86bfeb1 # feature: version 2
 No commands remaining.
-You are currently rebasing branch 'feature' on '5aafd33'.
+You are currently rebasing branch 'feature' on '3ed38c7'.
   (fix conflicts and then run "git rebase --continue")
   (use "git rebase --skip" to skip this patch)
   (use "git rebase --abort" to check out the original branch)
@@ -84,11 +93,11 @@ version = 2-feature
 $ cat version.txt
 <<<<<<< HEAD
 version = 2-main
-||||||| parent of f1f88a2 (feature: version 2)
+||||||| parent of 86bfeb1 (feature: version 2)
 version = 1
 =======
 version = 2-feature
->>>>>>> f1f88a2 (feature: version 2)
+>>>>>>> 86bfeb1 (feature: version 2)
 
 ### RESOLUCION ###
 
@@ -100,7 +109,7 @@ version = 2 (main + feature)
 $ git add version.txt
 
 $ env GIT_EDITOR=true git rebase --continue
-[detached HEAD ef45a3d] feature: version 2
+[detached HEAD 722da26] feature: version 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 Successfully rebased and updated refs/heads/feature.
 
@@ -109,9 +118,9 @@ Successfully rebased and updated refs/heads/feature.
 $ git status --short
 
 $ git log --oneline --graph --all --decorate
-* ef45a3d (HEAD -> feature) feature: version 2
-* 5aafd33 (main) main: version 2
-* 36bc557 base: version 1
+* 722da26 (HEAD -> feature) feature: version 2
+* 3ed38c7 (main) main: version 2
+* c2d19a3 base: version 1
 
 $ git show HEAD:version.txt
 version = 2 (main + feature)

@@ -8,7 +8,7 @@ const OUT_DIR = path.join(ROOT, 'documentacion');
 const OUT_PDF = path.join(OUT_DIR, 'Conflictos-Git-Guia-Simple.pdf');
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const REPO = 'https://github.com/75749748-blip/conflictos-git-ejercicios';
-const TOTAL_PAGES = 16;
+
 
 function esc(v) {
   return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -19,9 +19,23 @@ function dataUri(rel) {
 }
 
 const MAP = dataUri('mapa-mental/mapa-mental.png');
+
+// Cada ejercicio tiene una secuencia de capturas reales: la consola se
+// fotografía cada ~36 filas, así que entre todas las imágenes aparecen todos
+// los comandos y todas las salidas, no solo el resumen final.
+function seqShots(n) {
+  const dir = path.join(ROOT, 'build', 'real-captures', 'seq', n);
+  if (!fs.existsSync(dir)) {
+    return [dataUri(`build/real-captures/${n}.png`)];
+  }
+  const files = fs.readdirSync(dir).filter(f => /^\d+\.png$/.test(f)).sort();
+  return files.map(f => dataUri(path.join('build', 'real-captures', 'seq', n, f)));
+}
+
 const SHOTS = Object.fromEntries(
-  ['01','02','03','04','05','06','07','08','09','10'].map(n => [n, dataUri(`build/real-captures/${n}.png`)])
+  ['01','02','03','04','05','06','07','08','09','10'].map(n => [n, seqShots(n)])
 );
+const TOTAL_SHOTS = Object.values(SHOTS).reduce((s, a) => s + a.length, 0);
 
 const exercises = [
   {
@@ -138,8 +152,8 @@ const exercises = [
 
 const totalPass = exercises.reduce((s, e) => s + e.pass, 0);
 
-function foot(page) {
-  return `<div class="foot"><span>Conflictos de Git · Guía simple</span><span>${String(page).padStart(2, '0')} / ${TOTAL_PAGES}</span></div>`;
+function foot() {
+  return `<div class="foot"><span>Conflictos de Git · Guía simple</span><span>{{PAGE}} / {{TOTAL}}</span></div>`;
 }
 
 function head(eyebrow, title, sub) {
@@ -167,11 +181,11 @@ function cover() {
         <div><b>10/10</b><span>ejercicios</span></div>
         <div><b>57</b><span>comprobaciones</span></div>
         <div><b>0</b><span>fallos</span></div>
-        <div><b>10</b><span>capturas reales</span></div>
+        <div><b>${TOTAL_SHOTS}</b><span>capturas reales</span></div>
       </div>
     </div>
     <div class="clist"><div class="clist-t">Las cinco miradas</div>${rows}</div>
-    <div class="cfeatures"><span>10 ejercicios paso a paso</span><span>Mapa mental en Canvas HTML5</span><span>10 capturas reales</span></div>
+    <div class="cfeatures"><span>10 ejercicios paso a paso</span><span>Mapa mental en Canvas HTML5</span><span>${TOTAL_SHOTS} capturas reales</span></div>
     <div class="cfoot"><span>Ivan · Octubre 2026 · Windows 11</span><span>github.com/75749748-blip/conflictos-git-ejercicios</span></div>
     <div class="cnote">Un conflicto no es un error: es una pausa para decidir.</div>
   </section>`;
@@ -212,7 +226,7 @@ linea 2 (feature)
       </div>
     </div>
     <div class="gold"><span>Regla de oro</span>Si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.</div>
-    ${foot(2)}
+    ${foot()}
   </section>`;
 }
 
@@ -232,7 +246,7 @@ function pageMap() {
       <div class="mgold"><b>Regla de oro</b><span>Si no entiendes el cambio, no lo resuelvas. Primero mira las dos versiones.</span></div>
     </div>
     <p class="mapnote">Mapa dibujado con <b>Canvas HTML5</b> en <code>mapa-mental/mapa-mental.html</code>. Se puede abrir en el navegador y exportar en alta resolución.</p>
-    ${foot(3)}
+    ${foot()}
   </section>`;
 }
 
@@ -252,7 +266,7 @@ function pageMethod() {
     <div class="prevent"><b>5 · Prevenir</b><span>Ramas cortas, integrar seguido y avisar cuando dos personas tocan el mismo archivo.</span></div>
     <div class="label">LOS 10 EJERCICIOS DE ESTA GUÍA</div>
     <table class="overview"><thead><tr><th style="width:7%">#</th><th style="width:53%">Ejercicio</th><th style="width:17%">Operación</th><th style="width:23%">Resultado</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="usenote"><b>Cómo usar la guía.</b> Lee la página del ejercicio, mira la captura y repite los pasos en un repositorio de prueba. Cada página termina con el resultado real de la ejecución.</div>
+    <div class="usenote"><b>Cómo usar la guía.</b> Lee la página del ejercicio, revisa la secuencia de capturas y repite los pasos en un repositorio de prueba. Cada secuencia muestra los comandos tal como se ejecutaron en el equipo.</div>
     <div class="label" style="margin-top:6mm">LOS ESTADOS QUE APARECEN EN GIT STATUS</div>
     <div class="states">
       <div><b>UU</b><span>Los dos modificaron el archivo.</span></div>
@@ -260,12 +274,13 @@ function pageMethod() {
       <div><b>UD</b><span>Uno modificó y el otro eliminó.</span></div>
       <div><b>DU</b><span>Uno eliminó y el otro modificó.</span></div>
     </div>
-    ${foot(4)}
+    ${foot()}
   </section>`;
 }
 
-function pageExercise(e, page) {
+function pageExercise(e) {
   const steps = e.steps.map((s, i) => `<div class="step"><span class="sn">${i + 1}</span><div class="st"><p>${s.text}</p><code>${s.code}</code></div></div>`).join('');
+  const shots = SHOTS[e.n];
   return `<section class="page pex">
     <div class="exhead"><div class="eyebrow">Ejercicio ${e.n} / 10 · ${e.difficulty}</div><span class="op">${e.op}</span></div>
     <h2 class="extitle">${e.title}</h2>
@@ -274,8 +289,23 @@ function pageExercise(e, page) {
     <div class="label">CÓMO SE RESUELVE</div>
     <div class="steps">${steps}</div>
     <div class="result"><div class="rnum"><b>${e.pass}</b><span>PASS</span></div><div class="rdiv"></div><div class="rnum zero"><b>0</b><span>FAIL</span></div><div class="rdesc">${e.result}</div></div>
-    <div class="shot"><img src="${SHOTS[e.n]}" alt="Captura real del ejercicio ${e.n} con el resultado ${e.pass} PASS y 0 FAIL"><div class="cap"><span>Captura real de la consola · equipo del autor</span><span>${e.pass} PASS · 0 FAIL</span></div></div>
-    ${foot(page)}
+    <div class="shot"><img src="${shots[0]}" alt="Captura 1 de ${shots.length} del ejercicio ${e.n}: ${e.title}"><div class="cap"><span>Captura real 1 de ${shots.length} · consola del equipo</span><span>${e.pass} PASS · 0 FAIL</span></div></div>
+    ${foot()}
+  </section>`;
+}
+
+function pageEvidence(e, group) {
+  const total = SHOTS[e.n].length;
+  const figs = group.map(g => `<figure class="ev">
+      <img src="${g.src}" alt="Captura ${g.k} de ${total} del ejercicio ${e.n}: ${e.title}">
+      <figcaption><b>Captura ${g.k} de ${total}</b><span>comando y salida reales</span></figcaption>
+    </figure>`).join('');
+  const range = group.length > 1 ? `${group[0].k} y ${group[group.length - 1].k}` : `${group[0].k}`;
+  return `<section class="page pev">
+    <div class="exhead"><div class="eyebrow">Ejercicio ${e.n} / 10 · evidencia de ejecución</div><span class="op">${e.op}</span></div>
+    <p class="evlead"><b>Continuación de la consola real.</b> Cada línea <code>$</code> es un comando escrito en este equipo y debajo aparece su salida. Las capturas ${range} de ${total} completan la secuencia del ejercicio ${e.n}.</p>
+    <div class="evwrap">${figs}</div>
+    ${foot()}
   </section>`;
 }
 
@@ -287,7 +317,7 @@ function pageResults() {
       <div><b>10/10</b><span>ejercicios completados</span></div>
       <div><b>57</b><span>comprobaciones PASS</span></div>
       <div class="z"><b>0</b><span>fallos</span></div>
-      <div><b>10</b><span>capturas reales</span></div>
+      <div><b>${TOTAL_SHOTS}</b><span>capturas reales</span></div>
     </div>
     <table class="results"><thead><tr><th style="width:7%">#</th><th style="width:55%">Ejercicio</th><th style="width:10%">PASS</th><th style="width:10%">FAIL</th><th style="width:18%">Estado</th></tr></thead><tbody>${rows}</tbody></table>
     <div class="oknote"><b>Qué significa “verificado”.</b> El script creó el conflicto, aplicó la resolución y ejecutó comprobaciones automáticas. El árbol de trabajo quedó limpio, sin marcadores, en los diez casos.</div>
@@ -296,9 +326,9 @@ function pageResults() {
     <div class="evid">
       <div><span>1</span><b>Se crea el conflicto</b><p>Un script prepara un repositorio temporal y provoca el choque real.</p></div>
       <div><span>2</span><b>Se resuelve y valida</b><p>El ejercicio aplica la solución y ejecuta comprobaciones PASS/FAIL.</p></div>
-      <div><span>3</span><b>Se guarda la prueba</b><p>El log y la captura de consola quedan en el repositorio.</p></div>
+      <div><span>3</span><b>Se guarda la prueba</b><p>Las capturas de consola y el log completo quedan en el repositorio.</p></div>
     </div>
-    ${foot(15)}
+    ${foot()}
   </section>`;
 }
 
@@ -337,11 +367,27 @@ function pageClose() {
       <div><span>✓</span>Entiendo qué cambió cada lado</div>
     </div>
     <div class="closing"><p>Un conflicto bien resuelto deja el historial más claro, no más sucio.</p><span>10/10 ejercicios · 57 PASS · 0 FAIL</span></div>
-    ${foot(16)}
+    ${foot()}
   </section>`;
 }
 
 function html() {
+  const pages = [cover(), pageIdeas(), pageMap(), pageMethod()];
+  for (const e of exercises) {
+    pages.push(pageExercise(e));
+    const shots = SHOTS[e.n];
+    for (let i = 1; i < shots.length; i += 2) {
+      const group = shots.slice(i, i + 2).map((src, j) => ({ src, k: i + j + 1 }));
+      pages.push(pageEvidence(e, group));
+    }
+  }
+  pages.push(pageResults(), pageClose());
+  const total = String(pages.length).padStart(2, '0');
+  const body = pages
+    .map((p, i) => p.replace('{{PAGE}}', String(i + 1).padStart(2, '0')))
+    .join('')
+    .replace(/\{\{TOTAL\}\}/g, total);
+
   return `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Conflictos de Git · Guía simple</title><style>
     @page { size: A4; margin: 0; }
     * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -472,6 +518,16 @@ function html() {
     .shot img { display: block; width: 144mm; margin: 0 auto; border: .3mm solid #1e293b; border-radius: 2mm; background: #0b1220; }
     .cap { display: flex; justify-content: space-between; width: 144mm; margin: 1.4mm auto 0; font-size: 7.2pt; color: #94a3b8; }
 
+    /* Páginas de evidencia: secuencia completa de la consola */
+    .pev { padding-bottom: 18mm; }
+    .evlead { margin: 0 0 3.2mm; font-size: 8.4pt; line-height: 1.45; color: #475569; background: #f8fafc; border: .3mm solid #e8eef5; border-radius: 2.4mm; padding: 2.4mm 3.2mm; }
+    .evlead b { color: #0f172a; }
+    .evwrap { display: flex; flex-direction: column; gap: 3.2mm; }
+    .ev { margin: 0; }
+    .ev img { display: block; width: 112mm; margin: 0 auto; border: .3mm solid #1e293b; border-radius: 2mm; background: #0b1220; }
+    .ev figcaption { display: flex; justify-content: space-between; width: 112mm; margin: 1.2mm auto 0; font-size: 6.9pt; color: #94a3b8; }
+    .ev figcaption b { color: #0f766e; font-weight: 700; }
+
     /* Resultados */
     .bigstats { display: flex; gap: 3mm; margin: 2mm 0 6mm; }
     .bigstats div { flex: 1; background: #0f172a; color: #fff; border-radius: 3mm; padding: 4mm; text-align: center; }
@@ -510,13 +566,7 @@ function html() {
     .closing p { margin: 0; font-size: 11pt; color: #0f172a; font-weight: 600; }
     .closing span { font-size: 8pt; color: #0f766e; font-weight: 700; }
   </style></head><body>
-    ${cover()}
-    ${pageIdeas()}
-    ${pageMap()}
-    ${pageMethod()}
-    ${exercises.map((e, i) => pageExercise(e, 5 + i)).join('')}
-    ${pageResults()}
-    ${pageClose()}
+    ${body}
   </body></html>`;
 }
 

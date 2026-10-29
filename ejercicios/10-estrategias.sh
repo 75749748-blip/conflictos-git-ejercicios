@@ -7,8 +7,8 @@ source "$HERE/lib.sh"
 mark "PARTE A - -X ours frente a -s ours"
 new_repo "ejercicio-10a-estrategias"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run_sh "printf 'linea 1\\nlinea 2\\nlinea 3\\n' > app.txt"
 run git add app.txt
 run git commit -m "base"
@@ -42,8 +42,8 @@ check_absent "-s ours descarta nueva.txt" nueva.txt
 mark "PARTE B - rerere"
 new_repo "ejercicio-10b-rerere"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run git config rerere.enabled true
 run git config rerere.autoUpdate true
 run_sh "printf 'linea 1\\nlinea 2\\nlinea 3\\n' > app.txt"
@@ -81,8 +81,8 @@ check_sh "existe cache de rerere" "test -d .git/rr-cache"
 mark "PARTE C - merge=union y merge=ours"
 new_repo "ejercicio-10c-drivers"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run_sh "printf 'deps.lock merge=union\\n' > .gitattributes"
 run_sh "printf 'lock-a\\n' > deps.lock"
 run git add .gitattributes deps.lock

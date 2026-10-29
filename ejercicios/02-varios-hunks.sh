@@ -8,8 +8,8 @@ new_repo "ejercicio-02-hunks"
 
 mark "PREPARACION"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run git config merge.conflictStyle zdiff3
 run_sh "printf '[app]\\nnombre = demo\\nversion = 1.0\\npuerto = 8080\\n\\n[db]\\nhost = localhost\\npuerto = 5432\\n\\n[log]\\nnivel = info\\nruta = logs/app.log\\n' > config.ini"
 run git add config.ini

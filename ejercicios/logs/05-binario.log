@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 05-binario.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:58:44
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-05-binario
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-05-binario
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-05-binario/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ printf '*.bin binary\n' > .gitattributes
 
@@ -16,7 +25,7 @@ $ printf 'version 1\n' > logo.bin
 $ git add .gitattributes logo.bin
 
 $ git commit -m "base: logo v1 y atributo binario"
-[main (root-commit) 6004dd5] base: logo v1 y atributo binario
+[main (root-commit) 570c15f] base: logo v1 y atributo binario
  2 files changed, 1 insertion(+)
  create mode 100644 .gitattributes
  create mode 100644 logo.bin
@@ -33,7 +42,7 @@ Switched to a new branch 'feature'
 $ printf 'version FEATURE\n' > logo.bin
 
 $ git commit -am "feature: version FEATURE del logo"
-[feature 53f59a5] feature: version FEATURE del logo
+[feature 994f6f2] feature: version FEATURE del logo
  1 file changed, 0 insertions(+), 0 deletions(-)
 
 $ git switch main
@@ -42,7 +51,7 @@ Switched to branch 'main'
 $ printf 'version MAIN\n' > logo.bin
 
 $ git commit -am "main: version MAIN del logo"
-[main bb07134] main: version MAIN del logo
+[main 975b048] main: version MAIN del logo
  1 file changed, 0 insertions(+), 0 deletions(-)
 
 ### CONFLICTO ###
@@ -75,7 +84,7 @@ version FEATURE
 $ git add logo.bin
 
 $ git commit -m "merge: usa la version FEATURE del logo binario"
-[main 364ce91] merge: usa la version FEATURE del logo binario
+[main 036b088] merge: usa la version FEATURE del logo binario
 
 ### VALIDACION ###
 
@@ -87,12 +96,12 @@ $ cat logo.bin
 version FEATURE
 
 $ git log --oneline --graph --all --decorate
-*   364ce91 (HEAD -> main) merge: usa la version FEATURE del logo binario
+*   036b088 (HEAD -> main) merge: usa la version FEATURE del logo binario
 |\  
-| * 53f59a5 (feature) feature: version FEATURE del logo
-* | bb07134 main: version MAIN del logo
+| * 994f6f2 (feature) feature: version FEATURE del logo
+* | 975b048 main: version MAIN del logo
 |/  
-* 6004dd5 base: logo v1 y atributo binario
+* 570c15f base: logo v1 y atributo binario
   [PASS] el arbol de trabajo queda limpio
   [PASS] se eligio la version FEATURE
   [PASS] no se conserva la version MAIN

@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 09-inspeccion-mergetool.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 23:00:11
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion
 
 ### PREPARACION ###
@@ -5,16 +14,16 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-09-inspeccion/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ printf 'valor = 1\n' > config.txt
 
 $ git add config.txt
 
 $ git commit -m "base: valor 1"
-[main (root-commit) dc4eea6] base: valor 1
+[main (root-commit) 1478b63] base: valor 1
  1 file changed, 1 insertion(+)
  create mode 100644 config.txt
 
@@ -24,7 +33,7 @@ Switched to a new branch 'feature'
 $ printf 'valor = 2\n' > config.txt
 
 $ git commit -am "feature: valor 2"
-[feature f7eac8f] feature: valor 2
+[feature e751738] feature: valor 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -33,7 +42,7 @@ Switched to branch 'main'
 $ printf 'valor = 3\n' > config.txt
 
 $ git commit -am "main: valor 3"
-[main 8ade703] main: valor 3
+[main ba80c6a] main: valor 3
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git config merge.conflictStyle diff3
@@ -66,7 +75,7 @@ index 035cc36,3d2355f..0000000
 @@@ -1,1 -1,1 +1,7 @@@
 ++<<<<<<< HEAD
  +valor = 3
-++||||||| dc4eea6
+++||||||| 1478b63
 ++valor = 1
 ++=======
 + valor = 2
@@ -82,19 +91,19 @@ $ git show :3:config.txt
 valor = 2
 
 $ git log --merge --oneline -- config.txt
-8ade703 main: valor 3
-f7eac8f feature: valor 2
+ba80c6a main: valor 3
+e751738 feature: valor 2
 
 $ git diff --base -- config.txt
 * Unmerged path config.txt
 diff --git a/config.txt b/config.txt
-index b428fb3..1d31c2b 100644
+index b428fb3..aaadd6e 100644
 --- a/config.txt
 +++ b/config.txt
 @@ -1 +1,7 @@
 +<<<<<<< HEAD
 +valor = 3
-+||||||| dc4eea6
++||||||| 1478b63
  valor = 1
 +=======
 +valor = 2
@@ -103,7 +112,7 @@ index b428fb3..1d31c2b 100644
 $ cat config.txt
 <<<<<<< HEAD
 valor = 3
-||||||| dc4eea6
+||||||| 1478b63
 valor = 1
 =======
 valor = 2
@@ -146,7 +155,7 @@ valor = 5
 ### RESOLUCION ###
 
 $ git commit -m "merge: resuelve config.txt con mergetool"
-[main 865eb18] merge: resuelve config.txt con mergetool
+[main 60ee46d] merge: resuelve config.txt con mergetool
 
 $ cat config.txt
 valor = 5
@@ -163,12 +172,12 @@ $ git show HEAD:config.txt
 valor = 5
 
 $ git log --oneline --graph --all --decorate
-*   865eb18 (HEAD -> main) merge: resuelve config.txt con mergetool
+*   60ee46d (HEAD -> main) merge: resuelve config.txt con mergetool
 |\  
-| * f7eac8f (feature) feature: valor 2
-* | 8ade703 main: valor 3
+| * e751738 (feature) feature: valor 2
+* | ba80c6a main: valor 3
 |/  
-* dc4eea6 base: valor 1
+* 1478b63 base: valor 1
   [PASS] el arbol de trabajo queda limpio
   [PASS] no quedan marcadores en el repositorio
   [PASS] el valor final es 5

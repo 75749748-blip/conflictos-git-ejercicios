@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 07-cherry-pick.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:59:26
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-07-cherry-pick
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-07-cherry-pic
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-07-cherry-pick/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ git config merge.conflictStyle zdiff3
 
@@ -16,7 +25,7 @@ $ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 $ git add app.txt
 
 $ git commit -m base
-[main (root-commit) bfa2d3a] base
+[main (root-commit) e4bd711] base
  1 file changed, 3 insertions(+)
  create mode 100644 app.txt
 
@@ -26,7 +35,7 @@ Switched to a new branch 'feature'
 $ printf 'linea 1\nlinea 2 (feature)\nlinea 3\n' > app.txt
 
 $ git commit -am "feature: ajusta la linea 2"
-[feature 5676c05] feature: ajusta la linea 2
+[feature edeebec] feature: ajusta la linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -35,20 +44,18 @@ Switched to branch 'main'
 $ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
 
 $ git commit -am "main: ajusta la linea 2"
-[main c01db4a] main: ajusta la linea 2
+[main fbd46ff] main: ajusta la linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
-
-commit a aplicar: c01db4ac68b1f5cf221933c9eec1026bacdb12f5
 
 $ git switch feature
 Switched to branch 'feature'
 
 ### CONFLICTO ###
 
-$ git cherry-pick c01db4ac68b1f5cf221933c9eec1026bacdb12f5
+$ git cherry-pick fbd46ffff833cd697e9a036d71bace4af57c84fa
 Auto-merging app.txt
 CONFLICT (content): Merge conflict in app.txt
-error: could not apply c01db4a... main: ajusta la linea 2
+error: could not apply fbd46ff... main: ajusta la linea 2
 hint: After resolving the conflicts, mark them with
 hint: "git add/rm <pathspec>", then run
 hint: "git cherry-pick --continue".
@@ -60,7 +67,7 @@ hint: Disable this message with "git config set advice.mergeConflict false"
 
 $ git status
 On branch feature
-You are currently cherry-picking commit c01db4a.
+You are currently cherry-picking commit fbd46ff.
   (fix conflicts and run "git cherry-pick --continue")
   (use "git cherry-pick --skip" to skip this patch)
   (use "git cherry-pick --abort" to cancel the cherry-pick operation)
@@ -90,11 +97,11 @@ $ cat app.txt
 linea 1
 <<<<<<< HEAD
 linea 2 (feature)
-||||||| parent of c01db4a (main: ajusta la linea 2)
+||||||| parent of fbd46ff (main: ajusta la linea 2)
 linea 2
 =======
 linea 2 (main)
->>>>>>> c01db4a (main: ajusta la linea 2)
+>>>>>>> fbd46ff (main: ajusta la linea 2)
 linea 3
 
 ### RESOLUCION ###
@@ -109,8 +116,8 @@ linea 3
 $ git add app.txt
 
 $ env GIT_EDITOR=true git cherry-pick --continue
-[feature 1d80f90] main: ajusta la linea 2
- Date: Wed Oct 28 15:59:38 2026 -0500
+[feature 01a216a] main: ajusta la linea 2
+ Date: Wed Oct 28 22:59:32 2026 -0500
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 ### VALIDACION ###
@@ -118,11 +125,11 @@ $ env GIT_EDITOR=true git cherry-pick --continue
 $ git status --short
 
 $ git log --oneline --graph --all --decorate
-* 1d80f90 (HEAD -> feature) main: ajusta la linea 2
-* 5676c05 feature: ajusta la linea 2
-| * c01db4a (main) main: ajusta la linea 2
+* 01a216a (HEAD -> feature) main: ajusta la linea 2
+* edeebec feature: ajusta la linea 2
+| * fbd46ff (main) main: ajusta la linea 2
 |/  
-* bfa2d3a base
+* e4bd711 base
 
 $ git show HEAD:app.txt
 linea 1

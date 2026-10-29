@@ -8,8 +8,8 @@ new_repo "ejercicio-05-binario"
 
 mark "PREPARACION"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run_sh "printf '*.bin binary\\n' > .gitattributes"
 run_sh "printf 'version 1\\n' > logo.bin"
 run git add .gitattributes logo.bin

@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 01-conflicto-simple.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:57:13
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-01-linea
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-01-linea
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-01-linea/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ git config merge.conflictStyle zdiff3
 
@@ -16,7 +25,7 @@ $ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 $ git add app.txt
 
 $ git commit -m "base: crea app.txt"
-[main (root-commit) 5052c37] base: crea app.txt
+[main (root-commit) 31f66b4] base: crea app.txt
  1 file changed, 3 insertions(+)
  create mode 100644 app.txt
 
@@ -26,7 +35,7 @@ Switched to a new branch 'feature'
 $ printf 'linea 1\nlinea 2 (feature)\nlinea 3\n' > app.txt
 
 $ git commit -am "feature: cambia la linea 2"
-[feature f9c4d5d] feature: cambia la linea 2
+[feature 11fd76a] feature: cambia la linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 $ git switch main
@@ -35,7 +44,7 @@ Switched to branch 'main'
 $ printf 'linea 1\nlinea 2 (main)\nlinea 3\n' > app.txt
 
 $ git commit -am "main: cambia la linea 2"
-[main 2fb226d] main: cambia la linea 2
+[main f3de28c] main: cambia la linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 ### CONFLICTO ###
@@ -58,7 +67,7 @@ index 528d47a,53fc77e..0000000
   linea 1
 ++<<<<<<< HEAD
  +linea 2 (main)
-++||||||| 5052c37
+++||||||| 31f66b4
 ++linea 2
 ++=======
 + linea 2 (feature)
@@ -84,7 +93,7 @@ $ cat app.txt
 linea 1
 <<<<<<< HEAD
 linea 2 (main)
-||||||| 5052c37
+||||||| 31f66b4
 linea 2
 =======
 linea 2 (feature)
@@ -104,7 +113,7 @@ linea 3
 $ git add app.txt
 
 $ git commit -m "merge: integra feature conservando ambos cambios"
-[main 510fbeb] merge: integra feature conservando ambos cambios
+[main ded69b2] merge: integra feature conservando ambos cambios
 
 ### VALIDACION ###
 
@@ -113,12 +122,12 @@ $ git status --short
 $ git diff --check
 
 $ git log --oneline --graph --all --decorate
-*   510fbeb (HEAD -> main) merge: integra feature conservando ambos cambios
+*   ded69b2 (HEAD -> main) merge: integra feature conservando ambos cambios
 |\  
-| * f9c4d5d (feature) feature: cambia la linea 2
-* | 2fb226d main: cambia la linea 2
+| * 11fd76a (feature) feature: cambia la linea 2
+* | f3de28c main: cambia la linea 2
 |/  
-* 5052c37 base: crea app.txt
+* 31f66b4 base: crea app.txt
 
 $ git show HEAD:app.txt
 linea 1

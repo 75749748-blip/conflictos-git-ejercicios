@@ -6,9 +6,9 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 >
 > **Repositorio:** <https://github.com/75749748-blip/conflictos-git-ejercicios>
 >
-> **Autor:** Ivan · Octubre 2026
+> **Autor:** Ivan &lt;75749748@iegb.edu.pe&gt; · Octubre 2026
 >
-> **Entorno:** Windows 11 · Git 2.56.0.windows.1 · Git Bash · GitHub CLI 2.102.0
+> **Entorno:** equipo `IVAN` · Windows 11 · Git 2.56.0.windows.1 · Git Bash · GitHub CLI 2.102.0
 
 ## Contenido
 
@@ -21,7 +21,8 @@ Documentación y evidencia de los **10 ejercicios prácticos** de la guía de co
 | Presentación animada (PPTX) | [Conflictos-Git-Presentacion.pptx](Conflictos-Git-Presentacion.pptx) |
 | Presentación animada (PDF) | [Conflictos-Git-Presentacion.pdf](Conflictos-Git-Presentacion.pdf) |
 | Documentación técnica con capturas | [Documentacion-Ejercicios-Conflictos-Git.pdf](documentacion/Documentacion-Ejercicios-Conflictos-Git.pdf) |
-| Capturas de las sesiones | [capturas/](capturas/) |
+| Capturas de las sesiones | [build/real-captures/seq/](build/real-captures/seq/) |
+| Galería HTML de los 10 ejercicios | [build/galeria-ejercicios.html](build/galeria-ejercicios.html) |
 | Scripts y logs | [ejercicios/](ejercicios/) |
 
 ## Los 10 ejercicios
@@ -59,7 +60,7 @@ bash run-all.sh
 El script:
 
 1. Crea un repositorio temporal por ejercicio en `.work/` (ignorado por Git).
-2. Configura un usuario local de práctica (`Alumno <alumno@example.com>`).
+2. Toma la identidad real de `git config --global` (en este equipo `Ivan <75749748@iegb.edu.pe>`) y la fija en cada repositorio de práctica.
 3. Provoca el conflicto real, lo resuelve y ejecuta las validaciones.
 4. Guarda la salida completa en `ejercicios/logs/`.
 5. Devuelve código 0 solo si todas las comprobaciones pasan.
@@ -73,11 +74,36 @@ bash 06-rebase.sh
 
 ## Evidencia
 
-- **10 capturas reales de consola** en [`build/real-captures/`](build/real-captures/): se tomaron de la ventana de comandos del equipo del autor después de ejecutar cada script. La guía simple usa solo estas capturas.
+- **51 capturas reales de consola** en [`build/real-captures/seq/`](build/real-captures/seq/): cada ejercicio tiene su propia carpeta (`01/` … `10/`) con 4–10 imágenes. Se tomaron de la ventana de comandos de este equipo mientras los scripts se ejecutaban: no se reconstruyeron desde los logs.
+- El script se detiene cada **36 filas**, el runner fotografía la consola real y luego continúa. Entre todas las imágenes de un ejercicio aparecen **todos los comandos (`$ …`) y todas sus salidas**, además del `RESULTADO: N PASS, 0 FAIL` final.
+- Encabezado de entorno en cada ejecución: equipo (`IVAN`), usuario (`Ivan`), fecha, versión de Git e identidad (`Ivan <75749748@iegb.edu.pe>`).
 - **23 capturas de terminal** en [`capturas/`](capturas/): versión ilustrada de la documentación técnica, generada desde los logs con `build/make-captures.js`.
 - Cada log contiene la salida de Git, los comandos ejecutados y el bloque `RESULTADO: N PASS, 0 FAIL`.
 - El **mapa mental** está dibujado con Canvas HTML5 en [`mapa-mental/mapa-mental.html`](mapa-mental/mapa-mental.html); el PNG se exporta a 3600 × 2500 px.
-- La guía simple reúne el mapa, el método de 4 pasos y una página por ejercicio con su captura real.
+- La guía simple tiene **40 páginas**: el mapa, el método de 4 pasos, una página por ejercicio y páginas de evidencia con la secuencia completa de capturas.
+- La galería [`build/galeria-ejercicios.html`](build/galeria-ejercicios.html) reúne las 51 capturas en una sola página.
+
+### Volver a tomar las capturas
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build\real-captures\capture-seq.ps1
+# un solo ejercicio
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build\real-captures\capture-seq.ps1 -Only 05
+```
+
+Requiere Windows, Git para Windows y una sesión de escritorio activa: la captura usa `CopyFromScreen` sobre la ventana real de `conhost`. El detalle del método está en [`build/real-captures/README.md`](build/real-captures/README.md).
+
+### Regenerar los entregables
+
+```bash
+cd build
+node make-doc-simple.js        # PDF de 40 páginas en documentacion/
+node make-exercise-gallery.js  # galeria-ejercicios.html
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build\package-desktop.ps1
+```
 
 ## Estructura
 
@@ -94,9 +120,13 @@ bash 06-rebase.sh
 │   ├── mapa-mental.html
 │   └── mapa-mental.png
 ├── build/real-captures/
-│   ├── 01.png … 10.png
+│   ├── seq/
+│   │   ├── 01/01.png … 04.png
+│   │   ├── ...
+│   │   └── 10/01.png … 10.png      (51 capturas reales)
 │   ├── run-01.cmd … run-10.cmd
-│   └── capture-all.ps1
+│   ├── capture-seq.ps1             (runner de capturas por tramos)
+│   └── capture-all.ps1             (versión anterior, solo el resumen)
 ├── capturas/
 │   ├── 01-conflicto-simple/
 │   ├── ...
@@ -113,6 +143,9 @@ bash 06-rebase.sh
     ├── make-captures.js
     ├── make-doc.js
     ├── make-doc-simple.js
+    ├── make-exercise-gallery.js
+    ├── capture-window.ps1
+    ├── package-desktop.ps1
     ├── make-canvas-map.js
     ├── make-ppt.js
     ├── animate-ppt.ps1

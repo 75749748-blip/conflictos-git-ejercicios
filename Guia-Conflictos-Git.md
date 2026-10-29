@@ -33,8 +33,8 @@
 ### 0.2 Configuración inicial del laboratorio
 
 ```bash
-git config --global user.name "Alumno"
-git config --global user.email "alumno@example.com"
+git config --global user.name "Ivan"
+git config --global user.email "75749748@iegb.edu.pe"
 git config --global init.defaultBranch main
 
 # Muestra la base común dentro de los marcadores (muy recomendable):
@@ -963,8 +963,8 @@ RIESGOS ──► marcadores olvidados
 ```bash
 mkdir ex01-linea && cd ex01-linea
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 git config merge.conflictStyle zdiff3
 
 printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
@@ -1041,8 +1041,8 @@ git log --oneline --graph --all --decorate
 ```bash
 mkdir ex02-hunks && cd ex02-hunks
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf '[app]\nnombre = demo\nversion = 1.0\npuerto = 8080\n\n[db]\nhost = localhost\npuerto = 5432\n\n[log]\nnivel = info\nruta = logs/app.log\n' > config.ini
 git add config.ini
@@ -1111,8 +1111,8 @@ git show HEAD:config.ini
 ```bash
 mkdir ex03-mod-delete && cd ex03-mod-delete
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'uno\ndos\ntres\n' > notas.txt
 git add notas.txt
@@ -1191,8 +1191,8 @@ test -f notas.txt && echo "existe" || echo "eliminado"
 ```bash
 mkdir ex04-add-add && cd ex04-add-add
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'node_modules/\n' > .gitignore
 git add .gitignore
@@ -1258,8 +1258,8 @@ git show HEAD:CHANGELOG.md
 ```bash
 mkdir ex05-binario && cd ex05-binario
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf '*.bin binary\n' > .gitattributes
 printf 'version 1\n' > logo.bin
@@ -1328,8 +1328,8 @@ git status --short
 ```bash
 mkdir ex06-rebase && cd ex06-rebase
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'version = 1\n' > version.txt
 git add version.txt
@@ -1405,8 +1405,8 @@ git status
 ```bash
 mkdir ex07-cherry-pick && cd ex07-cherry-pick
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 git add app.txt
@@ -1468,8 +1468,8 @@ git status
 ```bash
 mkdir ex08-stash && cd ex08-stash
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 git add app.txt
@@ -1528,8 +1528,8 @@ git show HEAD:app.txt
 ```bash
 mkdir ex09-inspeccion && cd ex09-inspeccion
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'valor = 1\n' > config.txt
 git add config.txt
@@ -1628,8 +1628,8 @@ git show HEAD:config.txt
 ```bash
 mkdir ex10-estrategias && cd ex10-estrategias
 git init -b main
-git config user.name "Alumno"
-git config user.email "alumno@example.com"
+git config user.name "Ivan"
+git config user.email "75749748@iegb.edu.pe"
 
 printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 git add app.txt

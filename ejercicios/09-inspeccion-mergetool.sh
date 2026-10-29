@@ -8,8 +8,8 @@ new_repo "ejercicio-09-inspeccion"
 
 mark "PREPARACION"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run_sh "printf 'valor = 1\\n' > config.txt"
 run git add config.txt
 run git commit -m "base: valor 1"

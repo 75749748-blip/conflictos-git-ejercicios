@@ -1,4 +1,4 @@
-﻿param(
+param(
   [string]$Only = ''
 )
 
@@ -31,22 +31,12 @@ foreach ($it in $items) {
   $bat = @"
 @echo off
 title $title
-mode con: cols=70 lines=28
+mode con: cols=95 lines=40
 cd /d $root
 cls
 "C:\Program Files\Git\bin\bash.exe" -c "bash ejercicios/$slug.sh 2>&1 | tee ejercicios/logs/$slug.log"
 echo %ERRORLEVEL% > "$done"
-cls
-echo =========================================================
-echo    EJERCICIO $n - $($it.name)
-echo =========================================================
-echo.
-findstr /C:"[PASS]" /C:"RESULTADO" "ejercicios\logs\$slug.log"
-echo.
-echo =========================================================
-echo    Captura real tomada en este equipo. 0 FAIL.
-echo =========================================================
-pause >nul
+timeout /t 600 /nobreak >nul
 "@
   [System.IO.File]::WriteAllText($batPath, $bat.Replace("`r`n", "`n").Replace("`n", "`r`n"), (New-Object System.Text.UTF8Encoding($false)))
 

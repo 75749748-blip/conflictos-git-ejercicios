@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 04-add-add.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:58:23
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-04-add-add
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-04-add-add
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-04-add-add/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ git config merge.conflictStyle zdiff3
 
@@ -16,7 +25,7 @@ $ printf 'node_modules/\n' > .gitignore
 $ git add .gitignore
 
 $ git commit -m "base: ignora node_modules"
-[main (root-commit) 002e279] base: ignora node_modules
+[main (root-commit) f6e9a0b] base: ignora node_modules
  1 file changed, 1 insertion(+)
  create mode 100644 .gitignore
 
@@ -28,7 +37,7 @@ $ printf '# Changelog\n\n## 1.1.0\n- Login\n' > CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "feature: changelog 1.1.0"
-[feature 706544c] feature: changelog 1.1.0
+[feature 69bcff6] feature: changelog 1.1.0
  1 file changed, 4 insertions(+)
  create mode 100644 CHANGELOG.md
 
@@ -40,7 +49,7 @@ $ printf '# Changelog\n\n## 1.0.1\n- Dashboard\n' > CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "main: changelog 1.0.1"
-[main ce791e4] main: changelog 1.0.1
+[main 09cae7a] main: changelog 1.0.1
  1 file changed, 4 insertions(+)
  create mode 100644 CHANGELOG.md
 
@@ -66,7 +75,7 @@ index e314405,5f55ad3..0000000
 ++<<<<<<< HEAD
  +## 1.0.1
  +- Dashboard
-++||||||| 002e279
+++||||||| f6e9a0b
 ++=======
 + ## 1.1.0
 + - Login
@@ -78,7 +87,7 @@ $ cat CHANGELOG.md
 <<<<<<< HEAD
 ## 1.0.1
 - Dashboard
-||||||| 002e279
+||||||| f6e9a0b
 =======
 ## 1.1.0
 - Login
@@ -104,7 +113,7 @@ $ cat CHANGELOG.md
 $ git add CHANGELOG.md
 
 $ git commit -m "merge: unifica changelog con las entradas 1.1.0 y 1.0.1"
-[main 6ca4a98] merge: unifica changelog con las entradas 1.1.0 y 1.0.1
+[main 873b2e9] merge: unifica changelog con las entradas 1.1.0 y 1.0.1
 
 ### VALIDACION ###
 

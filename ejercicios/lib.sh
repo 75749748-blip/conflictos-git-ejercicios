@@ -2,6 +2,11 @@
 # Helpers shared by the ten Git conflict exercises.
 # The scripts are intentionally non-interactive so they can be run in CI
 # and captured as evidence.
+#
+# Capture mode (CAPTURE_MODE=1) pauses the script every N console rows and
+# waits for the PowerShell runner to take a real screenshot of the console
+# window. That way every command and every output line appears in an image
+# taken from the machine, not only the final summary.
 
 set -u
 
@@ -14,8 +19,85 @@ export GIT_CONFIG_COUNT=1
 export GIT_CONFIG_KEY_0=core.autocrlf
 export GIT_CONFIG_VALUE_0=false
 
+# Real identity of the person running the exercises. It is read from the
+# global Git configuration of this machine, so the commits are authentic.
+GIT_NAME="${GIT_NAME:-$(git config --global user.name 2>/dev/null)}"
+GIT_EMAIL="${GIT_EMAIL:-$(git config --global user.email 2>/dev/null)}"
+[ -n "$GIT_NAME" ] || GIT_NAME="Ivan"
+[ -n "$GIT_EMAIL" ] || GIT_EMAIL="75749748@iegb.edu.pe"
+
 PASS=0
 FAIL=0
+
+# ---------------------------------------------------------------- output ----
+# Every line goes to the console and, when LOG is set, to the log file.
+# This replaces `tee`, which would buffer the console and break the
+# screenshot timing.
+LOG="${LOG:-}"
+if [ -n "$LOG" ]; then : > "$LOG"; fi
+
+say() {
+  printf '%s\n' "$*"
+  if [ -n "$LOG" ]; then printf '%s\n' "$*" >> "$LOG"; fi
+}
+
+# --------------------------------------------------------------- capture ----
+CAPTURE_MODE="${CAPTURE_MODE:-0}"
+CAPTURE_DIR="${CAPTURE_DIR:-}"
+CAPTURE_TAG="${CAPTURE_TAG:-run}"
+CAPTURE_COLS="${CAPTURE_COLS:-95}"
+CAPTURE_LIMIT="${CAPTURE_LIMIT:-30}"
+BUDGET=0
+SHOT_N=0
+
+# Approximate number of console rows a text line occupies.
+rows_of() {
+  local len=${#1}
+  local rows=$(( (len + CAPTURE_COLS) / CAPTURE_COLS ))
+  [ "$rows" -ge 1 ] || rows=1
+  printf '%s' "$rows"
+}
+
+snap() {
+  [ "$CAPTURE_MODE" = "1" ] || return 0
+  [ -n "$CAPTURE_DIR" ] || return 0
+  SHOT_N=$((SHOT_N + 1))
+  local ready="$CAPTURE_DIR/ready-$CAPTURE_TAG-$SHOT_N.flag"
+  local go="$CAPTURE_DIR/go-$CAPTURE_TAG-$SHOT_N.flag"
+  : > "$ready"
+  local waited=0
+  while [ ! -f "$go" ]; do
+    sleep 0.1
+    waited=$((waited + 1))
+    [ "$waited" -lt 900 ] || break
+  done
+  BUDGET=0
+}
+
+add_rows() {
+  BUDGET=$((BUDGET + $1))
+  if [ "$CAPTURE_MODE" = "1" ] && [ "$BUDGET" -ge "$CAPTURE_LIMIT" ]; then
+    snap
+  fi
+}
+
+emit() {
+  say "$1"
+  add_rows "$(rows_of "$1")"
+}
+
+# ------------------------------------------------------------------ flow ----
+if [ "$CAPTURE_MODE" = "1" ]; then
+  say ""
+  say "================================================================"
+  say " Ejercicio : $(basename "$0")"
+  say " Equipo    : ${COMPUTERNAME:-desconocido}   Usuario: ${USERNAME:-desconocido}"
+  say " Fecha     : $(date '+%Y-%m-%d %H:%M:%S')"
+  say " Git       : $(git --version 2>/dev/null)"
+  say " Identidad : $GIT_NAME <$GIT_EMAIL>"
+  say "================================================================"
+  add_rows 8
+fi
 
 new_repo() {
   local name="$1"
@@ -23,49 +105,66 @@ new_repo() {
   rm -rf "$dir"
   mkdir -p "$dir"
   cd "$dir" || exit 1
-  printf 'workspace: %s\n' "$dir"
+  emit ""
+  emit "workspace: $dir"
 }
 
 run() {
-  printf '\n$'
-  local arg
+  local cmdline="" arg
   for arg in "$@"; do
     if [[ "$arg" == *" "* ]]; then
-      printf ' "%s"' "$arg"
+      cmdline="$cmdline \"$arg\""
     else
-      printf ' %s' "$arg"
+      cmdline="$cmdline $arg"
     fi
   done
-  printf '\n'
-  "$@" 2>&1
-  local rc=$?
+  emit ""
+  emit "\$${cmdline}"
+  local out rc
+  out="$("$@" 2>&1)"
+  rc=$?
+  if [ -n "$out" ]; then
+    local line
+    while IFS= read -r line; do
+      emit "$line"
+    done <<< "$out"
+  fi
   if [ "$rc" -ne 0 ]; then
-    printf '[exit %d]\n' "$rc"
+    emit "[exit $rc]"
   fi
   return 0
 }
 
 run_sh() {
-  printf '\n$ %s\n' "$1"
-  bash -c "$1" 2>&1
-  local rc=$?
+  emit ""
+  emit "\$ $1"
+  local out rc
+  out="$(bash -c "$1" 2>&1)"
+  rc=$?
+  if [ -n "$out" ]; then
+    local line
+    while IFS= read -r line; do
+      emit "$line"
+    done <<< "$out"
+  fi
   if [ "$rc" -ne 0 ]; then
-    printf '[exit %d]\n' "$rc"
+    emit "[exit $rc]"
   fi
   return 0
 }
 
 mark() {
-  printf '\n### %s ###\n' "$*"
+  emit ""
+  emit "### $* ###"
 }
 
 pass() {
-  printf '  [PASS] %s\n' "$1"
+  emit "  [PASS] $1"
   PASS=$((PASS + 1))
 }
 
 fail() {
-  printf '  [FAIL] %s\n' "$1"
+  emit "  [FAIL] $1"
   FAIL=$((FAIL + 1))
 }
 
@@ -162,7 +261,13 @@ check_conflict_count() {
 }
 
 finish() {
-  printf '\nRESULTADO: %d PASS, %d FAIL\n' "$PASS" "$FAIL"
+  emit ""
+  emit "RESULTADO: $PASS PASS, $FAIL FAIL"
+  # Solo se fotografía el final si la última línea no provocó ya una captura;
+  # así no se guarda dos veces la misma pantalla.
+  if [ "$CAPTURE_MODE" = "1" ] && [ "$BUDGET" -gt 0 ]; then
+    snap
+  fi
   if [ "$FAIL" -ne 0 ]; then
     exit 1
   fi

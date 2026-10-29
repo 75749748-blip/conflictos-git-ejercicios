@@ -8,8 +8,8 @@ new_repo "ejercicio-04-add-add"
 
 mark "PREPARACION"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run git config merge.conflictStyle zdiff3
 run_sh "printf 'node_modules/\\n' > .gitignore"
 run git add .gitignore

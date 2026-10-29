@@ -8,8 +8,8 @@ new_repo "ejercicio-08-stash"
 
 mark "PREPARACION"
 run git init -b main
-run git config user.name "Alumno"
-run git config user.email "alumno@example.com"
+run git config user.name "$GIT_NAME"
+run git config user.email "$GIT_EMAIL"
 run git config merge.conflictStyle zdiff3
 run_sh "printf 'linea 1\\nlinea 2\\nlinea 3\\n' > app.txt"
 run git add app.txt

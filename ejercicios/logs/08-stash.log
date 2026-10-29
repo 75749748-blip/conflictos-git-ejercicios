@@ -1,3 +1,12 @@
+
+================================================================
+ Ejercicio : 08-stash.sh
+ Equipo    : IVAN   Usuario: Ivan
+ Fecha     : 2026-10-28 22:59:50
+ Git       : git version 2.56.0.windows.1
+ Identidad : Ivan <75749748@iegb.edu.pe>
+================================================================
+
 workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-08-stash
 
 ### PREPARACION ###
@@ -5,9 +14,9 @@ workspace: /c/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-08-stash
 $ git init -b main
 Initialized empty Git repository in C:/Users/gambo/Documents/Git-Conflictos/.work/ejercicio-08-stash/.git/
 
-$ git config user.name Alumno
+$ git config user.name Ivan
 
-$ git config user.email alumno@example.com
+$ git config user.email 75749748@iegb.edu.pe
 
 $ git config merge.conflictStyle zdiff3
 
@@ -16,7 +25,7 @@ $ printf 'linea 1\nlinea 2\nlinea 3\n' > app.txt
 $ git add app.txt
 
 $ git commit -m base
-[main (root-commit) 81d48fd] base
+[main (root-commit) f6a06e8] base
  1 file changed, 3 insertions(+)
  create mode 100644 app.txt
 
@@ -31,7 +40,7 @@ stash@{0}: On main: wip: linea 2
 $ printf 'linea 1\nlinea 2 (commit)\nlinea 3\n' > app.txt
 
 $ git commit -am "main: cambia la linea 2"
-[main 47aa934] main: cambia la linea 2
+[main a67ed94] main: cambia la linea 2
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 ### CONFLICTO ###
@@ -78,10 +87,10 @@ linea 3
 $ git add app.txt
 
 $ git stash drop
-Dropped refs/stash@{0} (68970ab2e34d53e7a1a9d91b810da6354499c8cf)
+Dropped refs/stash@{0} (0df66437307182409934899e55bc78ae560f582b)
 
 $ git commit -m "feat: recupera el WIP combinado con el cambio de main"
-[main c295e96] feat: recupera el WIP combinado con el cambio de main
+[main 245c346] feat: recupera el WIP combinado con el cambio de main
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 ### VALIDACION ###
@@ -96,9 +105,9 @@ linea 2 (commit + WIP)
 linea 3
 
 $ git log --oneline --graph --all --decorate
-* c295e96 (HEAD -> main) feat: recupera el WIP combinado con el cambio de main
-* 47aa934 main: cambia la linea 2
-* 81d48fd base
+* 245c346 (HEAD -> main) feat: recupera el WIP combinado con el cambio de main
+* a67ed94 main: cambia la linea 2
+* f6a06e8 base
   [PASS] el arbol de trabajo queda limpio
   [PASS] no quedan marcadores en el repositorio
   [PASS] se combinan commit y WIP
